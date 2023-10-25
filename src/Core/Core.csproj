@@ -7,12 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\" />
     <Folder Include="Interfaces\" />
     <Folder Include="DomainEvents\" />
     <Folder Include="Aggregates\" />
-    <Folder Include="Specifications\" />
     <Folder Include="Services\" />
+    <Folder Include="Specifications\" />
   </ItemGroup>
 
 </Project>

@@ -4,7 +4,7 @@ namespace Web.Configuration;
 public static class ConfigureCookieSettings
 {
     public const int ValidityMinutesPeriod = 60;
-    public const string IdentifierCookieName = "EshopIdentifier";
+    public const string IdentifierCookieName = "StoreWebApp";
 
     public static IServiceCollection AddCookieSettings(this IServiceCollection services)
     {
@@ -24,6 +24,7 @@ public static class ConfigureCookieSettings
             options.LogoutPath = "/Identity/Account/Logout";
             options.AccessDeniedPath = "/Identity/Account/AccessDenied";
             options.SlidingExpiration = true;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             options.Cookie = new CookieBuilder
             {
                 Name = IdentifierCookieName,

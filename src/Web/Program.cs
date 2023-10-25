@@ -1,10 +1,12 @@
+using Infrastructure.Options;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Web.Configuration;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();
@@ -30,6 +32,16 @@ else
     });
 }
 
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+    options.Tokens.ProviderMap.Add("CustomEmailConfirmation",
+        new TokenProviderDescriptor(
+            typeof(CustomEmailConfirmationTokenProvider<ApplicationUser>)));
+    options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
+
+}).AddEntityFrameworkStores<AppIdentityDbContext>();
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddDefaultUI()
     .AddEntityFrameworkStores<AppIdentityDbContext>()
@@ -39,12 +51,7 @@ builder.Services.AddIdentityOptions();
 builder.Services.AddCookieSettings();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        options.Cookie.SameSite = SameSiteMode.Lax;
-    });
+    .AddCookie();
 
 //builder.Services.AddScoped<ITokenClaimsService, IdentityTokenClaimService>();
 builder.Configuration.AddEnvironmentVariables();
@@ -52,6 +59,10 @@ builder.Services.AddCoreServices(builder.Configuration);
 builder.Services.AddWebServices(builder.Configuration);
 
 builder.Services.AddMemoryCache();
+
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
+builder.Services.Configure<DataProtectionTokenProviderOptions>(o =>
+       o.TokenLifespan = TimeSpan.FromHours(3));
 
 var app = builder.Build();
 
@@ -77,6 +88,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapDefaultControllerRoute();
+
 app.MapRazorPages();
 
 app.Run();

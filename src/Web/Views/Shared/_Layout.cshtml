@@ -1,14 +1,51 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
-
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artem lokh</title>
+    <title>@ViewData["Title"]</title>
+    @RenderSection("Styles");
+    <link rel="stylesheet" href="~/css/main.css">
+    <link rel="stylesheet" href="~/css/header.css">
+    <link rel="stylesheet" href="~/css/footer.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    @RenderBody()
+    <header class="header__wrapper">
+        <div class="header container">
+            <div class="header__logo-block">
+                <img src="img/logo.png" class="header__logo">
+                <a href="#!" class="header__link">Каталог</a>
+            </div>
+            <div class="header__nav-block">
+                <div class="header__phone">+7(915)808 80 71</div>
+                <div class="header__search-block">
+                    <input type="text" class="header__search-inp">
+                    <svg class="header__search-svg">
+                        <use href="img/sprite.svg#search"></use>
+                    </svg>
+                </div>
+                <svg class="header__svg header__svg--cart">
+                    <use href="img/sprite.svg#cart"></use>
+                </svg>
+                <svg class="header__svg header__svg--account">
+                    <use href="img/sprite.svg#account"></use>
+                </svg>
+            </div>
+        </div>
+    </header>
+    @RenderBody();
+    <footer class="footer__wrapper">
+        <div class="footer container">
+        </div>
+    </footer>
+    
+    @RenderSection("Scripts");
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 </body>
-    @await RenderSectionAsync("Scripts", required: false)
 </html>
