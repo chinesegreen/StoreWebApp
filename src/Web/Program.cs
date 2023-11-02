@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Web.Configuration;
 using Infrastructure.Services;
-using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();
@@ -32,20 +31,16 @@ else
     });
 }
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = true;
+    options.SignIn.RequireConfirmedAccount = false;
     options.Tokens.ProviderMap.Add("CustomEmailConfirmation",
         new TokenProviderDescriptor(
             typeof(CustomEmailConfirmationTokenProvider<ApplicationUser>)));
     options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
 
-}).AddEntityFrameworkStores<AppIdentityDbContext>();
+}).AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultUI();
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddDefaultUI()
-    .AddEntityFrameworkStores<AppIdentityDbContext>()
-        .AddDefaultTokenProviders();
 builder.Services.AddIdentityOptions();
 
 builder.Services.AddCookieSettings();
@@ -53,16 +48,18 @@ builder.Services.AddCookieSettings();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie();
 
-//builder.Services.AddScoped<ITokenClaimsService, IdentityTokenClaimService>();
+builder.Services.AddPolicies();
+
 builder.Configuration.AddEnvironmentVariables();
+
 builder.Services.AddCoreServices(builder.Configuration);
 builder.Services.AddWebServices(builder.Configuration);
 
 builder.Services.AddMemoryCache();
 
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
-builder.Services.Configure<DataProtectionTokenProviderOptions>(o =>
-       o.TokenLifespan = TimeSpan.FromHours(3));
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+       options.TokenLifespan = TimeSpan.FromHours(3));
 
 var app = builder.Build();
 

@@ -8,7 +8,102 @@
     <link rel="stylesheet" href="~/css/pages/home-page.css">
 }
 
-<h1>Sex</h1>
+<div class="fast-buy__wrapper">
+    <section class="fast-buy container">
+        <div class="fast-buy__category--first fast-buy__category-track">
+            <div class="category-track__btn--prev"></div>
+            <div class="category-track__btn--next"></div>
+            <div class="fast-buy__slider-wrapper">
+                <div class="fast-buy__category fast-slider__inner">
+                    <p class="fast-buy__subtitle">Topsale Collection</p>
+                    <p class="fast-buy__title">Living Room<br>Furniture</p>
+                    <button class="fast-buy__btn">Shop now</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="fast-buy__category fast-buy__category--second">
+            <div class="fast-buy__shadow"></div>
+            <div class="fast-buy__category--mini">
+                <p class="fast-buy__subtitle fast-buy__subtitle--mini">Topsale Collection</p>
+                <p class="fast-buy__title fast-buy__title--mini">Living Room<br>Furniture</p>
+                <button class="fast-buy__btn fast-buy__btn--mini">Shop now</button>
+            </div>
+        </div>
+        <div class="fast-buy__category fast-buy__category--third">
+            <div class="fast-buy__shadow"></div>
+            <div class="fast-buy__category--mini">
+                <p class="fast-buy__subtitle fast-buy__subtitle--mini">Topsale Collection</p>
+                <p class="fast-buy__title fast-buy__title--mini">Living Room<br>Furniture</p>
+                <button class="fast-buy__btn fast-buy__btn--mini">Shop now</button>
+            </div>
+        </div>
+    </section>
+</div>
+<section class="trand-products__wrapper">
+    <div class="trand-products container">
+        <p class="trand-products__title">Trendy Products</p>
+        <ul class="trand-products__list">
+            <!-- от 4 штук (от сюда) -->
+            @for (int i = 0; i < Model.Trendings.Count; i++)
+            {
+                <li class="trand-products__products-card">
+                    <img src="@Model.Trendings[i].ImageLink" class="products-card__img">
+                    <p class="products-card__title">@Model.Trendings[i].Name</p>
+                    <p class="products-card__price">@Model.Trendings[i].Price</p>
+                    <button class="products-card__btn" id="1">Add to cart</button>
+                </li>
+            }
+            <!-- (до сюда) -->
+        </ul>
+    </div>
+</section>
+<section class="categories__wrapper">
+    <div class="categories-block container">
+        <p class="categories-block__title">Shop by Categories</p>
+        <div class="categories-block__categories-grid">
+            <div class="categories-grid__item">
+                <div class="categories-grid__item-shadow"></div>
+                <p class="categories-grid__title">Outdoor</p>
+                <a href="#!" class="categories-grid__btn">Shop now</a>
+            </div>
+            <div class="categories-grid__item">
+                <div class="categories-grid__item-shadow"></div>
+                <p class="categories-grid__title">Furniture and Design</p>
+                <a href="#!" class="categories-grid__btn">Shop now</a>
+            </div>
+            <div class="categories-grid__item">
+                <div class="categories-grid__item-shadow"></div>
+                <p class="categories-grid__title">Kitchen & Utensil</p>
+                <a href="#!" class="categories-grid__btn">Shop now</a>
+            </div>
+            <div class="categories-grid__item">
+                <div class="categories-grid__item-shadow"></div>
+                <p class="categories-grid__title">Lighting</p>
+                <a href="#!" class="categories-grid__btn">Shop now</a>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="trand-products__wrapper">
+    <div class="trand-products container">
+        <p class="trand-products__title">Recent Arrivals</p>
+        <ul class="trand-products__list">
+            <!-- от 8 штук (от сюда) -->
+            @for (int i = 0; i < Model.RecentArrivals.Count; i++)
+            {
+                <li class="trand-products__products-card">
+                    <img src="@Model.RecentArrivals[i].ImageLink" class="products-card__img">
+                    <p class="products-card__title">@Model.RecentArrivals[i].Name</p>
+                    <p class="products-card__price">@Model.RecentArrivals[i].Price</p>
+                    <button class="products-card__btn" id="1">Add to cart</button>
+                </li>
+            }
+            <!-- (до сюда) -->
+        </ul>
+        <button class="load-more-product">Load more products</button>
+    </div>
+</section>
 
 @section Scripts {
     

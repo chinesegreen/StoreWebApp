@@ -28,8 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\img\products\" />
-    <Folder Include="wwwroot\js\" />
+    <Folder Include="wwwroot\js\pages\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

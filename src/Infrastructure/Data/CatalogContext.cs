@@ -11,10 +11,7 @@ namespace Infrastructure.Data
     public class CatalogContext : DbContext
     {
         public CatalogContext(DbContextOptions<CatalogContext> options)
-            : base(options)
-        {
-            Database.EnsureCreated();
-        }
+            : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -22,5 +19,6 @@ namespace Infrastructure.Data
         }
 
         DbSet<Product> Products { get; set; }
+        DbSet<Tag> Tags { get; set; }
     }
 }

@@ -4,6 +4,7 @@ namespace Web.ViewModels
 {
     public class IndexViewModel
     {
-        List<Product> Products { get; set; }
+        public List<Product> Trendings { get; set; }
+        public List<Product> RecentArrivals { get; set; }
     }
 }

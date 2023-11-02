@@ -6,7 +6,7 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/login.css" />
+    <link rel="stylesheet" href="~/css/pages/login-page.css" />
 }
 
 <div class="login__wrapper">
@@ -26,7 +26,7 @@
                         <input asp-for="Input.Password" class="login-block__input form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
-                    <div class="login-block__checkbox-block checkbox mb-3">
+                    <div class="login-block__input-block login-block__checkbox-block checkbox mb-3">
                         <button id="login-submit" type="submit" class="login-block__btn-login w-100 btn btn-lg btn-primary">Log in</button>
                         <label asp-for="Input.RememberMe" class="login-block__checkbox form-label">
                             <input class="login-block__inp--checkbox form-check-input" asp-for="Input.RememberMe" type="checkbox" />
@@ -34,7 +34,7 @@
                             @Html.DisplayNameFor(m => m.Input.RememberMe)
                         </label>
                     </div>
-                    <div class="login-block__desk-wrapper">
+                    <div class="login-block__input-block login-block__desk-wrapper">
                         <a id="forgot-password" class="login-block__desk" asp-page="./ForgotPassword">Forgot your password?</a>
                         <a asp-page="./Register" class="login-block__desk" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
                         <a id="resend-confirmation" class="login-block__desk" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>

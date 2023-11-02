@@ -1,4 +1,12 @@
-body{margin: 0;padding: 0;box-sizing: border-box;max-width: 100%;font-family: 'Poppins', sans-serif;background-color: #ffffff;}
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+    font-family: 'Poppins', sans-serif;
+    background-color: #ffffff;
+    overflow: hidden;
+}
 h1, h2, h3, h4, h5, h6, ul, ol, li, p{margin: 0;padding: 0;}
 ul, ol{list-style: none;}
 a{text-decoration: none;color: black;}     
@@ -8,7 +16,7 @@ img {max-width: 100%;display: block;}
   font-family: 'Poppins', sans-serif;
 }
 .login__wrapper {
-  background-image: url("../img/itachi2.jpg");
+  background-image: url("../../img/background.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -41,16 +49,21 @@ img {max-width: 100%;display: block;}
   color: #777;
 }
 .login-block__input {
-  font-size: 14px;
-  font-weight: 300;
-  margin: 10px 0 15px 0;
-  width: 530px;
-  padding: 10px 20px;
-  color: #777777;
-  background-color: #FAFAFA;
-  border: 1px solid #ced4da;
-  outline: none;
-  transition: .2s;
+    font-size: 14px;
+    font-weight: 300;
+    margin: 10px 0 0 0;
+    width: 530px;
+    padding: 10px 20px;
+    color: #777777;
+    background-color: #FAFAFA;
+    border: 1px solid #ced4da;
+    outline: none;
+    transition: .2s;
+}
+.text-danger {
+    margin-top: 4px;
+    display: block;
+    color: #777;
 }
 .login-block__input:focus {
   border: 1px solid #c96;

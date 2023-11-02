@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Web.Controllers
 {
-    [Authorize("Admin")]
+    [Authorize]
     [ValidateAntiForgeryToken]
     public class ProductController : BaseController
     {
@@ -23,22 +23,11 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] ProductModel model)
+        public IActionResult AddToBasket(int productId)
         {
             if (!ModelState.IsValid)
             {
                 return View();
-            }
-
-            string unique = Guid.NewGuid().ToString();
-
-            string name = model.Image.FileName + unique;
-            string uploads = Path.Combine(_hostingEnvironment.WebRootPath, "img/products");
-
-            string filePath = Path.Combine(uploads, name);
-            using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await model.Image.CopyToAsync(fileStream);
             }
 
             return Ok();
