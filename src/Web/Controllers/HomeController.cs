@@ -1,48 +1,49 @@
-﻿using Core.Entities;
-using Infrastructure.Data;
+﻿using Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Manage.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 using Web.ViewModels;
 
 namespace Web.Controllers
 {
-    //[Authorize("Admin")]
+    [Authorize]
     public class HomeController : BaseController
     {
-        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly CatalogContext _context;
 
         public HomeController(
-            IWebHostEnvironment hostingEnvironment,
             CatalogContext context)
         {
-            _hostingEnvironment = hostingEnvironment;
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             IndexViewModel model = new IndexViewModel();
 
-            model.Trendings = new List<Product>();
-            model.RecentArrivals = new List<Product>();
-            
-            //for (int i = 0; i < 4; i++)
-            //{
-            //    _context.Find<Product>(1);
-            //}
+            var trending = await _context.Products.Where(p => p.IsTrending && !p.IsDeleted).ToListAsync();
+
+            if (trending.Count <= 4)
+            {
+                model.Trendings = trending;
+            }
+            else
+            {
+                model.Trendings = trending.GetRange(trending.Count - 4, trending.Count);
+            }
+
+            var all = await _context.Products.Where(p => !p.IsDeleted).ToListAsync();
+
+            if (all.Count <= 8)
+            {
+                model.RecentArrivals = all;
+            }
+            else
+            {
+                model.RecentArrivals = all.GetRange(all.Count - 8, all.Count);
+            }
 
             return View(model);
-        }
-
-        public IActionResult Product(int productId)
-        {
-            var product = _context.Find<Product>(productId);
-
-            return View(product);
         }
     }
 }

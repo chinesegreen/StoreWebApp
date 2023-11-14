@@ -10,7 +10,7 @@ public static class ConfigureWebServices
     public static IServiceCollection AddWebServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        //services.AddTransient<IEmailSender, EmailSender>();
+        services.AddTransient<IEmailSender, EmailSender>();
         services.AddTransient<CustomEmailConfirmationTokenProvider<ApplicationUser>>();
 
         return services;

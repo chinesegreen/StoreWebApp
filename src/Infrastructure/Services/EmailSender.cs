@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SendGrid.Helpers.Mail;
-using SendGrid;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Options;
+using SendWithBrevo;
 
 namespace Infrastructure.Services
 {
@@ -27,30 +26,24 @@ namespace Infrastructure.Services
 
         public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
-            if (string.IsNullOrEmpty(Options.SendGridKey))
+            if (string.IsNullOrEmpty(Options.BrevoKey))
             {
-                throw new Exception("Null SendGridKey");
+                throw new Exception("Null BrevoKey");
             }
-            await Execute(Options.SendGridKey, subject, message, toEmail);
+            await Execute(Options.BrevoKey, subject, message, toEmail);
         }
 
         public async Task Execute(string apiKey, string subject, string message, string toEmail)
         {
-            var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage()
-            {
-                From = new EmailAddress("Joe@contoso.com", "Password Recovery"),
-                Subject = subject,
-                PlainTextContent = message,
-                HtmlContent = message
-            };
-            msg.AddTo(new EmailAddress(toEmail));
+            var client = new BrevoClient(apiKey);
 
-            // Disable click tracking.
-            // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
-            msg.SetClickTracking(false, false);
-            var response = await client.SendEmailAsync(msg);
-            _logger.LogInformation(response.IsSuccessStatusCode
+            var to = new List<Recipient>() { new Recipient() };
+            to[0].Email = toEmail;
+
+            var sender = new Sender("PipeAndPuff", "pipeandpuff.sup@gmail.com");
+
+            var isSuccess = await client.SendAsync(sender, to, subject, message);
+            _logger.LogInformation(isSuccess
                                    ? $"Email to {toEmail} queued successfully!"
                                    : $"Failure Email to {toEmail}");
         }

@@ -18,7 +18,8 @@ namespace Infrastructure.Data
             base.OnModelCreating(builder);
         }
 
-        DbSet<Product> Products { get; set; }
-        DbSet<Tag> Tags { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Additional> Additionals { get; set; }
     }
 }

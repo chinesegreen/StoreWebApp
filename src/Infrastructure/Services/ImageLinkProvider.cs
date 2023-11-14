@@ -20,7 +20,7 @@ namespace Infrastructure.Services
                 await file.CopyToAsync(fileStream);
             }
 
-            return filePath;
+            return $"/img/products/{name}";
         }
     }
 }

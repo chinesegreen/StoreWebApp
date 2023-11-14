@@ -48,10 +48,10 @@
             @for (int i = 0; i < Model.Trendings.Count; i++)
             {
                 <li class="trand-products__products-card">
-                    <img src="@Model.Trendings[i].ImageLink" class="products-card__img">
+                    <img src="@Model.Trendings[i].ImageLink" class="products-card__img" id="@Model.Trendings[i].Id">
                     <p class="products-card__title">@Model.Trendings[i].Name</p>
-                    <p class="products-card__price">@Model.Trendings[i].Price</p>
-                    <button class="products-card__btn" id="1">Add to cart</button>
+                    <p class="products-card__price">@Model.Trendings[i].Price.ToString("# rub")</p>
+                    <a class="products-card__btn" id="@Model.Trendings[i].Id">Add to cart</a>
                 </li>
             }
             <!-- (до сюда) -->
@@ -93,10 +93,12 @@
             @for (int i = 0; i < Model.RecentArrivals.Count; i++)
             {
                 <li class="trand-products__products-card">
-                    <img src="@Model.RecentArrivals[i].ImageLink" class="products-card__img">
+                    <a class="products-card__img" id="@Model.RecentArrivals[i].Id">
+                        <img src="@Model.RecentArrivals[i].ImageLink" class="products-card__img">
+                    </a>
                     <p class="products-card__title">@Model.RecentArrivals[i].Name</p>
-                    <p class="products-card__price">@Model.RecentArrivals[i].Price</p>
-                    <button class="products-card__btn" id="1">Add to cart</button>
+                    <p class="products-card__price">@Model.RecentArrivals[i].Price.ToString("# rub")</p>
+                    <a class="products-card__btn" id="@Model.RecentArrivals[i].Id">Add to cart</a>
                 </li>
             }
             <!-- (до сюда) -->
@@ -106,5 +108,5 @@
 </section>
 
 @section Scripts {
-    
+    <script src="~/js/pages/main-page.js"></script>
 }

@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-    public class Tag
+    public class Additional
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string? Link { get; set; }
-        public List<Product>? Products { get; set; }
+        public int ProductId { get; set; }
+        public string ImageLink { get; set; }
     }
 }

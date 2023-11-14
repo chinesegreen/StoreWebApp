@@ -13,7 +13,7 @@ builder.Logging.AddConsole();
 // Add services to the container.
 builder.Services.AddMvc();
 
-if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Docker")
+if (!builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Docker")
 {
     Infrastructure.Dependencies.ConfigureServices(builder.Configuration, builder.Services);
 }
@@ -31,9 +31,18 @@ else
     });
 }
 
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.Name = ".Pipe&Puff.Session";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false;
     options.Tokens.ProviderMap.Add("CustomEmailConfirmation",
         new TokenProviderDescriptor(
             typeof(CustomEmailConfirmationTokenProvider<ApplicationUser>)));
@@ -84,7 +93,10 @@ app.UseCookiePolicy();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseSession();
+
 app.MapDefaultControllerRoute();
+app.MapControllers();
 
 app.MapRazorPages();
 

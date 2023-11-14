@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\js\pages\" />
+    <Folder Include="Views\Admin\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

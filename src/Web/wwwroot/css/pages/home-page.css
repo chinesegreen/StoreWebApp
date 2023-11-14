@@ -286,6 +286,7 @@
     color: #414141;
     cursor: pointer;
     transition: .3s;
+    text-align: center;
 }
 
     .products-card__btn:hover {
