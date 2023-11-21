@@ -1,0 +1,223 @@
+﻿@{
+    ViewData["Title"] = "AhHA";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/create-page.css">
+}
+
+<main class="main">
+    <div class="main-container">
+        <div class="main__title-block">
+            <p class="main__title">Создание товара</p>
+            <nav class="main-nav">
+                <ul class="main-nav__list">
+                    <li class="main-nav__item">
+                        <a href="#!" class="main-nav__link"><span class="main-nav__span">1</span>Информация о товаре</a>
+                    </li>
+                    <li class="main-nav__item">
+                        <a href="#!" class="main-nav__link main-nav__link--disable"><span class="main-nav__span main-nav__span--disable">2</span>Предварительный простмотр</a>
+                    </li>
+                    <ul>
+            </nav>
+        </div>
+        <form class="main__form" id="form">
+            <section class="form__view">
+                <p class="form__title">Информация о товаре</p>
+
+                <input class="form__input form__input--select" type="text" placeholder="Категория и тип *" name="Tags">
+
+                <input type="text" name="Name" class="form__input" placeholder="Название">
+                <input type="text" name="VendorCode" class="form__input" placeholder="Артикул *">
+                <textarea type="text" name="Description" class="form__input form__input--area" placeholder="Описание" maxlength="500"></textarea>
+                <input type="text" name="Subtitle" class="form__input" placeholder="Подзагаловок">
+                <div class="form__block-duo">
+                    <input type="number" name="Price" class="form__input" placeholder="Цена *">
+                    <input type="number" name="PriceWithoutDiscount" class="form__input" placeholder="Цена до скидки*">
+                </div>
+                <input type="checkbox" name="IsTrending" id="IsTrending">
+                <div class="form__wrapper-radio">
+                    <p class="block-radio__title">НДС (налог на добавочную стоймость) *</p>
+                    <div class="form__block-radio">
+                        <div class="form__radio">
+                            <input type="radio" name="ValueTax" id="nds10" class="form__radio-input" value="10">
+                            <label class="form__radio-tile" for="nds10">10%</label>
+                        </div>
+                        <div class="form__radio">
+                            <input type="radio" name="ValueTax" id="nds20" class="form__radio-input" value="20">
+                            <label class="form__radio-tile" for="nds20">20%</label>
+                        </div>
+                        <div class="form__radio">
+                            <input type="radio" name="ValueTax" id="ndsNone" class="form__radio-input" value="0" checked>
+                            <label class="form__radio-tile" for="ndsNone">Не облагается</label>
+                        </div>
+                    </div>
+                </div>
+                <p class="form__title">Габариты и вес</p>
+                <input class="form__input form__input--select" type="text" placeholder="Длина упаковки, мм *" name="Length">
+                <input class="form__input form__input--select" type="text" placeholder="Ширина упаковки, мм *" name="Width">
+                <input class="form__input form__input--select" type="text" placeholder="Высота упаковки, мм *" name="Height">
+                <input class="form__input form__input--select" type="text" placeholder="Вес упаковки, г *" name="Weight">
+                <p class="form__title">Фото <span class="form__title--count"><span class="form__title--numcount">0</span>/15</span></p>
+                <input class="form__input form__input--file" type="file" name="Image" id="photo" multiple>
+                <div class="form__wrapper-photo">
+                    <label for="photo" class="form__photo--main form__photo-label"></label>
+                    <div class="form__photo-blocks">
+                        <div class="form__photo-wrapper">
+                            <!-- <div class="form__photo--bg"></div> -->
+                            <!-- <div class="form__photo--plus">+</div> -->
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                        <div class="form__photo-wrapper">
+                            <!-- <div class="form__photo--bg"></div> -->
+                            <!-- <div class="form__photo--plus">+</div> -->
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                        <div class="form__photo-wrapper">
+                            <!-- <div class="form__photo--bg"></div> -->
+                            <!-- <div class="form__photo--plus">+</div> -->
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                        <div class="form__photo-wrapper">
+                            <!-- <div class="form__photo--bg"></div> -->
+                            <!-- <div class="form__photo--plus">+</div> -->
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                        <div class="form__photo-wrapper">
+                            <!-- <div class="form__photo--bg"></div> -->
+                            <!-- <div class="form__photo--plus">+</div> -->
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                        <div class="form__photo-wrapper">
+                            <!-- <div class="form__photo--bg"></div> -->
+                            <!-- <div class="form__photo--plus">+</div> -->
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                        <div class="form__photo-wrapper">
+                            <!-- <div class="form__photo--bg"></div> -->
+                            <!-- <div class="form__photo--plus">+</div> -->
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                        <div class="form__photo-wrapper">
+                            <!-- <div class="form__photo--bg"></div> -->
+                            <!-- <div class="form__photo--plus">+</div> -->
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                        <div class="form__photo-wrapper">
+                            <!-- <div class="form__photo--bg"></div> -->
+                            <!-- <div class="form__photo--plus">+</div> -->
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                        <div class="form__photo-wrapper">
+                            <!-- <div class="form__photo--bg"></div> -->
+                            <!-- <div class="form__photo--plus">+</div> -->
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                        <div class="form__photo-wrapper">
+                            <!-- <div class="form__photo--bg"></div> -->
+                            <!-- <div class="form__photo--plus">+</div> -->
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                        <div class="form__photo-wrapper">
+                            <div class="form__photo--bg"></div>
+                            <div class="form__photo--plus">+</div>
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                        <div class="form__photo-wrapper">
+                            <!-- <div class="form__photo--bg"></div> -->
+                            <!-- <div class="form__photo--plus">+</div> -->
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                        <div class="form__photo-wrapper">
+                            <label for="photo" class="form__photo form__photo-label"></label>
+                        </div>
+                    </div>
+                </div>
+                <a class="form__btn-preview">Предварительный простмотр</a>
+            </section>
+            <section class="form__view main__form--none">
+                <p class="form__title">(Название товара)</p>
+                <div class="form__wrapper-photo">
+                    <label for="photo" class="form__photo--main form__photo-label form__photo--preview"></label>
+                    <div class="form__photo-blocks">
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
+                    </div>
+                </div>
+                <p class="form__subtitle">Информация о товаре</p>
+                <ul class="form-list">
+                    <li class="form-list__item">
+                        <p class="form-list__item-name">Категория и тип</p>
+                        <p class="form-list__item-text" id="Tags">--//--</p>
+                    </li>
+                    <li class="form-list__item">
+                        <p class="form-list__item-name">Название</p>
+                        <p class="form-list__item-text" id="Name">--//--</p>
+                    </li>
+                    <li class="form-list__item">
+                        <p class="form-list__item-name">Подзагаловок</p>
+                        <p class="form-list__item-text" id="Subtitle">--//--</p>
+                    </li>
+                    <li class="form-list__item">
+                        <p class="form-list__item-name">Описание</p>
+                        <p class="form-list__item-text form-list__item-text--desk" id="Description">--//--</p>
+                    </li>
+                    <li class="form-list__item">
+                        <p class="form-list__item-name">Артикул</p>
+                        <p class="form-list__item-text" id="VendorCode">--//--</p>
+                    </li>
+                    <li class="form-list__item">
+                        <p class="form-list__item-name">Цена</p>
+                        <p class="form-list__item-text" id="Price">--//--</p>
+                    </li>
+                    <li class="form-list__item">
+                        <p class="form-list__item-name">Цена до скидки</p>
+                        <p class="form-list__item-text" id="PriceWithoutDiscount">--//--</p>
+                    </li>
+                    <li class="form-list__item">
+                        <p class="form-list__item-name">НДС (налог на добавочную стоймость)</p>
+                        <p class="form-list__item-text" id="ValueTax">--//--</p>
+                    </li>
+                    <li class="form-list__item">
+                        <p class="form-list__item-name">Длина упаковки</p>
+                        <p class="form-list__item-text" id="Length">--//--</p>
+                    </li>
+                    <li class="form-list__item">
+                        <p class="form-list__item-name">Ширина упаковки</p>
+                        <p class="form-list__item-text" id="Width">--//--</p>
+                    </li>
+                    <li class="form-list__item">
+                        <p class="form-list__item-name">Высота упаковки</p>
+                        <p class="form-list__item-text" id="Height">--//--</p>
+                    </li>
+                    <li class="form-list__item">
+                        <p class="form-list__item-name">Вес упаковки</p>
+                        <p class="form-list__item-text" id="Weight">--//--</p>
+                    </li>
+                    <li class="form-list__item">
+                        <p class="form-list__item-name">Буяка - </p>
+                        <p class="form-list__item-text" id="Image">--//--</p>
+                    </li>
+                    <ul>
+                        <button class="form__btn-submit" type="submit">Завершить создание</button>
+            </section>
+        </form>
+    </div>
+</main>
+
+@section Scripts {
+    <script src="~/js/admin/create-page.js"></script>
+}

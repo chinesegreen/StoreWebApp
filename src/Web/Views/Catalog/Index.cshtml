@@ -1,0 +1,42 @@
+﻿@model CatalogViewModel
+
+@{
+
+}
+
+@foreach (var product in Model.Products)
+{
+    <li class="product__item">
+        <div class="product__info-block product__info-block--radio">
+            <input type="checkbox" class="product__radio" value="@product.Id" name="choiceProduct">
+        </div>
+        <div class="product__info-block product__info-block--article">
+            <p class="product__article">@product.VendorCode</p>
+        </div>
+        <div class="product__info-block product__info-block--photo">
+            <img src="@product.ImageLink" class="product__img">
+        </div>
+        <div class="product__info-block product__info-block--name-product">
+            <a href="/Catalog/Product/@product.Id" class="product__name-product">@product.Name</a>
+        </div>
+        <div class="product__info-block product__info-block--content-rating">
+            <p class="product__content-rating">@product.Price.ToString("#.00 rub")</p>
+        </div>
+        <div class="product__info-block product__info-block--data-create">
+            <p class="product__data-create">@product.QuantityInStock.ToString("# шт.")</p>
+        </div>
+        <div class="product__info-block product__info-block--data-create">
+            @if (product.IsDeleted)
+            {
+                <p class="product__status--deleted">Удалён</p>
+            }
+            else
+            {
+                <p class="product__status--on-sale">В продаже</p>
+            }
+        </div>
+        <div class="product__info-block product__info-block--rewrite">
+            <a href="/Admin/EditProduct/@product.Id" class="product__rewrite">Редактировать</a>
+        </div>
+    </li>
+}

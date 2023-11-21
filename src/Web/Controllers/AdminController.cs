@@ -5,16 +5,16 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
 using System.Security.Claims;
 using Web.BindingModels;
+using Web.ViewModels;
 
 namespace Web.Controllers
 {
     //[Authorize("Admin")]
     //[ValidateAntiForgeryToken]
-    [ApiController]
-    [Route("api")]
     public class AdminController : BaseController
     {
         private readonly CatalogContext _context;
@@ -25,29 +25,72 @@ namespace Web.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
+        {
+            return RedirectToAction(nameof(Catalog));
+        }
+
+        public async Task<IActionResult> Catalog()
+        {
+            var products = await _context.Products.ToListAsync();
+
+            var model = new AdminProductsViewModel()
+            {
+                Products = products
+            };
+
+            return View("Products", model);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        public IActionResult Edit()
         {
             return View();
         }
 
         [HttpPost]
-        [Route("Product/[Action]")]
-        public async Task<IActionResult> Add([FromForm] CreateProductCommand cmd)
+        [Route("[Controller]/Product/[Action]")]
+        public async Task<IActionResult> Edit([FromForm] EditProductCommand cmd)
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("[Controller]/Product/[Action]")]
+        public async Task<IActionResult> Create([FromForm] CreateProductCommand cmd)
         {
             if (!ModelState.IsValid)
             {
-                return Problem(cmd.ToJson());
+                return View("/Error");
             }
-
-            string filePath = await ImageLinkProvider.SaveFile(cmd.Image);
+            
+            var profilePic = cmd.Images[0];
+            cmd.Images.RemoveAt(0);
+            string filePath = await ImageLinkProvider.SaveFile(profilePic);
 
             var product = new Product()
             {
                 Name = cmd.Name,
+                NormalizedName = cmd.Name.ToUpper(),
                 Description = cmd.Description,
+                ValueTax = cmd.ValueTax,
+                VendorCode = cmd.VendorCode,
+                NormalizedVendorCode = cmd.VendorCode.ToUpper(),
                 Price = cmd.Price,
-                ImageLink = filePath
+                ImageLink = filePath,
+                Dimensions = cmd.Dimensions
             };
+
+            // Try without null check like dimensions
+
+            if (cmd.PriceWithoutDiscount != null)
+            {
+                product.PriceWithoutDiscount = cmd.PriceWithoutDiscount;
+            }
 
             if (cmd.Tags != null)
             {
@@ -55,15 +98,16 @@ namespace Web.Controllers
                 new Tag
                 {
                     Name = t,
+                    NormalizedName = t.ToUpper(),
                     Link = t
                 }).ToList();
             }
 
-            if (cmd.Additionals != null)
+            if (cmd.Images != null)
             {
                 var filePaths = new List<string>();
 
-                foreach (var item in cmd.Additionals)
+                foreach (var item in cmd.Images)
                 {
                     filePaths.Add(await ImageLinkProvider.SaveFile(item));
                 }
@@ -75,6 +119,7 @@ namespace Web.Controllers
             }
 
             _context.Add(product);
+
             await _context.SaveChangesAsync();
 
             return Ok(product.Id);
@@ -94,22 +139,77 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete([FromBody] List<int> ids)
         {
-            var product = _context.Products
-                .Where(p => p.Id.Equals(id))
+            foreach (var id in ids)
+            {
+                var product = _context.Products
+                .Where(p => p.Id == id)
                 .FirstOrDefault();
 
-            if (product == null)
+                if (product == null)
+                {
+                    return BadRequest();
+                }
+
+                _context.Remove(product);
+
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromSale([FromBody] ProductsModel model)
+        {
+            Console.WriteLine(model.ids);
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            product.IsDeleted = true;
-            
-            await _context.SaveChangesAsync();
+            foreach (var id in model.ids)
+            {
+                var product = _context.Products
+                .Where(p => p.Id == id)
+                .FirstOrDefault();
+
+                if (product == null)
+                {
+                    return BadRequest();
+                }
+
+                product.IsDeleted = true;
+
+                await _context.SaveChangesAsync();
+            }
 
             return Ok();
+        }
+
+        [Route("[controller]/[action]/{searchString}")]
+        public async Task<IActionResult> Search(string searchString)
+        {
+            var products = from p in _context.Products
+                           select p;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(p => (p.NormalizedName!
+                .Contains(searchString.ToUpper()) || p.NormalizedVendorCode!.Contains(searchString.ToUpper()))
+                && !p.IsDeleted);
+            }
+
+            var viewProducts = await products.ToListAsync();
+
+            var model = new AdminProductsViewModel()
+            {
+                Products = viewProducts,
+                NumberOfPages = viewProducts.Count / 10
+            };
+
+            return View("Index", model);
         }
     }
 }

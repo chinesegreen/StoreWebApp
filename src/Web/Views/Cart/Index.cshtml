@@ -26,37 +26,24 @@
                 <div class="cart__part-item">Total</div>
                 <div class="cart__part-item"></div>
             </li>
-            <li class="cart__item cart__item--order" id="1">
-                <div class="cart__part-item"><img src="../img/itachi1.jpg"></div>
-                <div class="cart__part-item">Product</div>
-                <div class="cart__part-item">$<span class="cart__part-item__price-span">84</span>.00</div>
-                <div class="cart__part-item"><input type="number" min="1" max="10" value='1' class="cart__part-input"></div>
-                <div class="cart__part-item cart__part-item--total-price">$<span class="cart__part-item__total-price-span">84</span>.00</div>
-                <div class="cart__part-item cart__part-item--delete">X</div>
-            </li>
-            <li class="cart__item cart__item--order" id="2">
-                <div class="cart__part-item"><img src="../img/itachi2.jpg"></div>
-                <div class="cart__part-item">Product</div>
-                <div class="cart__part-item">$<span class="cart__part-item__price-span">84</span>.00</div>
-                <div class="cart__part-item"><input type="number" min="1" max="10" value='1' class="cart__part-input"></div>
-                <div class="cart__part-item cart__part-item--total-price">$<span class="cart__part-item__total-price-span">84</span>.00</div>
-                <div class="cart__part-item cart__part-item--delete">X</div>
-            </li>
-            <li class="cart__item cart__item--order" id="3">
-                <div class="cart__part-item"><img src="../img/itachi3.jpg"></div>
-                <div class="cart__part-item">Product</div>
-                <div class="cart__part-item">$<span class="cart__part-item__price-span">84</span>.00</div>
-                <div class="cart__part-item"><input type="number" min="1" max="10" value='1' class="cart__part-input"></div>
-                <div class="cart__part-item cart__part-item--total-price">$<span class="cart__part-item__total-price-span">84</span>.00</div>
-                <div class="cart__part-item cart__part-item--delete">X</div>
-            </li>
+            @foreach (var line in Model.Cart.Lines)
+            {
+                <li class="cart__item cart__item--order" id="@line.Product.Id">
+                    <div class="cart__part-item"><img src="@line.Product.ImageLink"></div>
+                    <div class="cart__part-item">@line.Product.Name</div>
+                    <div class="cart__part-item"><span class="cart__part-item__price-span">@line.Product.Price.ToString("#.00")</span></div>
+                    <div class="cart__part-item"><input type="number" min="1" max="10" value='@line.Quantity' class="cart__part-input"></div>
+                    <div class="cart__part-item cart__part-item--total-price"><span class="cart__part-item__total-price-span">@((line.Quantity * line.Product.Price).ToString("#.00"))</span></div>
+                    <div class="cart__part-item cart__part-item--delete">X</div>
+                </li>
+            }
             <li class="cart__item cart__item--end">
-                <p class="cart__item--end-text">Your basket is empty</p>
+                <p class="cart__item--end-text">Your cart is empty</p>
             </li>
         </ul>
         <div class="cart-result">
             <p class="cart-result__title">Cart Total</p>
-            <p class="cart-result__subtitle">Subtotal:<span>$<span class="cart-result__subtotal-price">00</span>.00</span></p>
+            <p class="cart-result__subtitle">Subtotal:<span><span class="cart-result__subtotal-price">@Model.Cart.ComputeTotalValue().ToString("#.00")</span></span></p>
             <div class="cart-result__shipping">
                 <p class="shipping__title">Shipping</p>
                 <ul class="shipping__radio-list">

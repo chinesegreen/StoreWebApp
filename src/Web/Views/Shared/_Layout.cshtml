@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -17,9 +20,9 @@
     <header class="header__wrapper">
         <div class="header container">
             <div class="header__logo-block">
-                <img src="~/img/logo.png" class="header__logo">
-                <a href="#!" class="header__link">Catalog</a>
-                <a href="#!" class="header__link">Cart</a>
+                <a href="/"><img src="~/img/logo.png" class="header__logo"></a>
+                <a href="/Catalog" class="header__link">Catalog</a>
+                <a href="/Cart" class="header__link">Cart</a>
             </div>
             <div class="header__nav-block">
                 <div class="header__search-block">
@@ -30,7 +33,14 @@
                         </svg>
                     </label>
                 </div>
-                <a href="#!" class="header__link header__link--log">LogIn</a>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a href="/Account" class="header__link header__link--log">@UserManager.GetUserName(User)</a>
+                }
+                else
+                {
+                    <a href="/Account/Login" class="header__link header__link--log">LogIn</a>
+                }
             </div>
         </div>
     </header>

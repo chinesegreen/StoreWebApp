@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
 
 namespace Web.Configuration
 {
@@ -6,13 +7,16 @@ namespace Web.Configuration
     {
         public static void Set<T>(this ISession session, string key, T value)
         {
-            session.SetString(key, JsonSerializer.Serialize(value));
+            session.SetString(key, JsonConvert.SerializeObject(value));
         }
 
         public static T? Get<T>(this ISession session, string key)
         {
             var value = session.GetString(key);
-            return value == null ? default : JsonSerializer.Deserialize<T>(value);
+
+            var deserialized = value == null ? default : JsonConvert.DeserializeObject<T>(value);
+            
+            return deserialized;
         }
     }
 }

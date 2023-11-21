@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
+    [Serializable]
     public class Cart
     {
         private List<CartLine> lineCollection = new List<CartLine>();
@@ -13,7 +14,7 @@ namespace Core.Entities
         public void AddItem(Product product, int quantity)
         {
             CartLine line = lineCollection
-                .Where(g => g.Product.Id == product.Id)
+                .Where(c => c.Product.Id == product.Id)
                 .FirstOrDefault();
 
             if (line == null)

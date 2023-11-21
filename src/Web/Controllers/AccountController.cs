@@ -13,14 +13,18 @@ namespace Web.Controllers
     public class AccountController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly CatalogContext _context;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public AccountController(UserManager<ApplicationUser> userManager,
-            CatalogContext context,
-            AppIdentityDbContext idContext)
+            SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
-            _context = context;
+            _signInManager = signInManager;
+        }
+
+        public IActionResult Im()
+        {
+            return View();
         }
     }
 }

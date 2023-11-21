@@ -52,14 +52,14 @@
             <div class="main-section__subinfo">
                 <div class="subinfo__category-block">
                     <div class="category-block__desk">Category: 
-                        @foreach (var tag in (Model.Tags ??= new List<Tag>() { new Tag() { Name = "No tags", Link = "" } }))
+                        @foreach (var tag in Model.Tags)
                         {
                             <span class="category-block__span"><a href="/Catalog/Categories/@tag.Link" class="category-block__link">@tag.Name</a></span>
                         }
                 </div>
                 <div class="desk-block__wrapper">
                     <p class="desk-block__title">Description</p>
-                    <p class="desk-block__desk">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia nisi repudiandae, maxime, nihil odit, modi numquam reiciendis iusto expedita quod architecto facilis ducimus nemo minus vitae! Animi cumque nam commodi.</p>
+                    <p class="desk-block__desk">@Model.Description</p>
                 </div>
             </div>
         </div>
