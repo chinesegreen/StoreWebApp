@@ -1,0 +1,80 @@
+﻿@model CatalogViewModel
+
+@{
+    ViewData["Title"] = "Catalog";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/catalog.css">
+}
+
+<div class="catalog__wrapper">
+    <div class="catalog-section container">
+        <form action="#!" class="form-filter">
+            <ul class="sitebar__list">
+                <input type="text" name="searchForCategory" placeholder="Поиск по категориям">
+                <li class="sitebar__item">
+                    <p class="sitebar__title-item">Цена</p>
+                    <div class="sitebar__price-interval">
+                        <input type="number" name="price-from" class="sitebar__price-interval sitebar__price-interval--from" placeholder="От 0">
+                        <input type="number" name="price-from" class="sitebar__price-interval sitebar__price-interval--to" placeholder="100000">
+                    </div>
+                    <div class="sitebar__input-blocks">
+                        <div class="sitebar__input-wrapper">
+                            <input type="checkbox" name="price" id="from0to250" class="sitebar__input" value="0-100">
+                            <label for="from0to250">0-250</label>
+                        </div>
+                        <div class="sitebar__input-wrapper">
+                            <input type="checkbox" name="price" id="from251to500" class="sitebar__input" value="0-100">
+                            <label for="from251to500">251-500</label>
+                        </div>
+                        <div class="sitebar__input-wrapper">
+                            <input type="checkbox" name="price" id="from501to750" class="sitebar__input" value="0-100">
+                            <label for="from501to750">501-750</label>
+                        </div>
+                        <div class="sitebar__input-wrapper">
+                            <input type="checkbox" name="price" id="from750to999" class="sitebar__input" value="0-100">
+                            <label for="from750to999">750-999</label>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </form>
+        <div class="catalog">
+            <div class="catalog__wrapper">
+                <p class="present-block__title">Title</p>
+                <ul class="catalog__present-block">
+                    @if (Model.Products != null && Model.Products.Any())
+                    {
+                        @foreach (var product in Model.Products)
+                        {
+                            <li class="catalog__products-card">
+                                <img src="@product.Picture" class="products-card__img">
+                                <p class="products-card__title">@product.Name</p>
+                                <p class="products-card__price">@product.Price.ToString("# rub")</p>
+                                <a class="products-card__btn" href="Catalog/Product/@product.Id" id="@product.Id">Add to cart</a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+            <div class="next-page">
+                <a class="next-page__btn next-page__btn--next" href="@Model.CalculatePrevious()"><</a>
+                @for (int i = Model.CurrentPage; i < Model.CurrentPage + 4 && i <= Model.NumberOfPages; i++)
+                {
+                    <a class="next-page__btn next-page__btn--next" href="@i">@i</a>
+                    if (Model.NumberOfPages > 4)
+                    {
+                        <a class="next-page__btn next-page__btn--span">...</a>
+                        <a class="next-page__btn next-page__btn--last" href="@Model.NumberOfPages">@Model.NumberOfPages</a>
+                    }
+                }
+                <a class="next-page__btn next-page__btn--next" href="@Model.CalculateNext()">></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+}

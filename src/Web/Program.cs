@@ -68,6 +68,7 @@ builder.Services.AddWebServices(builder.Configuration);
 builder.Services.AddMemoryCache();
 
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
+builder.Services.Configure<AwsCredentials>(builder.Configuration);
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
        options.TokenLifespan = TimeSpan.FromHours(3));
 

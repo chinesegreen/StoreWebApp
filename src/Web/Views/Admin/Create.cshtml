@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "AhHA";
+    ViewData["Title"] = "Create new product";
     Layout = "_AdminLayout";
 }
 
@@ -19,24 +19,33 @@
                     <li class="main-nav__item">
                         <a href="#!" class="main-nav__link main-nav__link--disable"><span class="main-nav__span main-nav__span--disable">2</span>Предварительный простмотр</a>
                     </li>
-                    <ul>
+                </ul>
             </nav>
         </div>
         <form class="main__form" id="form">
             <section class="form__view">
                 <p class="form__title">Информация о товаре</p>
 
-                <input class="form__input form__input--select" type="text" placeholder="Категория и тип *" name="Tags">
+                <ul class="categories__list">
+                    Выбранные категории:
+                </ul>
+                <div class="form__categories">
+                    <input class="form__input form__input--select" type="text" placeholder="Категории" name="Categories">
+                    <a class="form__categories--btn">+</a>
+                </div>
 
                 <input type="text" name="Name" class="form__input" placeholder="Название">
+                <input type="text" name="Manufacturer" class="form__input" placeholder="Производитель">
                 <input type="text" name="VendorCode" class="form__input" placeholder="Артикул *">
                 <textarea type="text" name="Description" class="form__input form__input--area" placeholder="Описание" maxlength="500"></textarea>
-                <input type="text" name="Subtitle" class="form__input" placeholder="Подзагаловок">
                 <div class="form__block-duo">
                     <input type="number" name="Price" class="form__input" placeholder="Цена *">
-                    <input type="number" name="PriceWithoutDiscount" class="form__input" placeholder="Цена до скидки*">
+                    <input type="number" name="PriceWithoutDiscount" class="form__input" placeholder="Цена до скидки">
                 </div>
-                <input type="checkbox" name="IsTrending" id="IsTrending">
+                <div class="form__checkbox">
+                    <input type="checkbox" name="IsTrending" id="IsTrending">
+                    <label for="IsTrending">Добавить продукт в тренды?</label>
+                </div>
                 <div class="form__wrapper-radio">
                     <p class="block-radio__title">НДС (налог на добавочную стоймость) *</p>
                     <div class="form__block-radio">
@@ -59,96 +68,46 @@
                 <input class="form__input form__input--select" type="text" placeholder="Ширина упаковки, мм *" name="Width">
                 <input class="form__input form__input--select" type="text" placeholder="Высота упаковки, мм *" name="Height">
                 <input class="form__input form__input--select" type="text" placeholder="Вес упаковки, г *" name="Weight">
-                <p class="form__title">Фото <span class="form__title--count"><span class="form__title--numcount">0</span>/15</span></p>
-                <input class="form__input form__input--file" type="file" name="Image" id="photo" multiple>
+                <p class="form__title">Фото <span class="form__title--count"><span class="form__title--numcount">0</span>/7</span></p>
+                <input class="form__input form__input--file" type="file" name="Image" id="picture">
                 <div class="form__wrapper-photo">
-                    <label for="photo" class="form__photo--main form__photo-label"></label>
+                    <label for="picture" class="form__photo--main form__photo-label"><img class="form__photo-label--img"></label>
                     <div class="form__photo-blocks">
                         <div class="form__photo-wrapper">
-                            <!-- <div class="form__photo--bg"></div> -->
-                            <!-- <div class="form__photo--plus">+</div> -->
-                            <label for="photo" class="form__photo form__photo-label"></label>
+                            <label for="Image2" class="form__photo form__photo-label"><img class="form__photo-label--img"></label>
+                            <input class="form__input form__input--file form__input--img" type="file" name="Image2" id="Image2">
                         </div>
                         <div class="form__photo-wrapper">
-                            <!-- <div class="form__photo--bg"></div> -->
-                            <!-- <div class="form__photo--plus">+</div> -->
-                            <label for="photo" class="form__photo form__photo-label"></label>
+                            <label for="Image3" class="form__photo form__photo-label"><img class="form__photo-label--img"></label>
+                            <input class="form__input form__input--file form__input--img" type="file" name="Image3" id="Image3">
                         </div>
                         <div class="form__photo-wrapper">
-                            <!-- <div class="form__photo--bg"></div> -->
-                            <!-- <div class="form__photo--plus">+</div> -->
-                            <label for="photo" class="form__photo form__photo-label"></label>
+                            <label for="Image4" class="form__photo form__photo-label"><img class="form__photo-label--img"></label>
+                            <input class="form__input form__input--file form__input--img" type="file" name="Image4" id="Image4">
                         </div>
                         <div class="form__photo-wrapper">
-                            <!-- <div class="form__photo--bg"></div> -->
-                            <!-- <div class="form__photo--plus">+</div> -->
-                            <label for="photo" class="form__photo form__photo-label"></label>
+                            <label for="Image5" class="form__photo form__photo-label"><img class="form__photo-label--img"></label>
+                            <input class="form__input form__input--file form__input--img" type="file" name="Image5" id="Image5">
                         </div>
                         <div class="form__photo-wrapper">
-                            <!-- <div class="form__photo--bg"></div> -->
-                            <!-- <div class="form__photo--plus">+</div> -->
-                            <label for="photo" class="form__photo form__photo-label"></label>
+                            <label for="Image6" class="form__photo form__photo-label"><img class="form__photo-label--img"></label>
+                            <input class="form__input form__input--file form__input--img" type="file" name="Image6" id="Image6">
                         </div>
                         <div class="form__photo-wrapper">
-                            <!-- <div class="form__photo--bg"></div> -->
-                            <!-- <div class="form__photo--plus">+</div> -->
-                            <label for="photo" class="form__photo form__photo-label"></label>
+                            <label for="Image7" class="form__photo form__photo-label"><img class="form__photo-label--img"></label>
+                            <input class="form__input form__input--file form__input--img" type="file" name="Image7" id="Image7">
                         </div>
-                        <div class="form__photo-wrapper">
-                            <!-- <div class="form__photo--bg"></div> -->
-                            <!-- <div class="form__photo--plus">+</div> -->
-                            <label for="photo" class="form__photo form__photo-label"></label>
-                        </div>
-                        <div class="form__photo-wrapper">
-                            <!-- <div class="form__photo--bg"></div> -->
-                            <!-- <div class="form__photo--plus">+</div> -->
-                            <label for="photo" class="form__photo form__photo-label"></label>
-                        </div>
-                        <div class="form__photo-wrapper">
-                            <!-- <div class="form__photo--bg"></div> -->
-                            <!-- <div class="form__photo--plus">+</div> -->
-                            <label for="photo" class="form__photo form__photo-label"></label>
-                        </div>
-                        <div class="form__photo-wrapper">
-                            <!-- <div class="form__photo--bg"></div> -->
-                            <!-- <div class="form__photo--plus">+</div> -->
-                            <label for="photo" class="form__photo form__photo-label"></label>
-                        </div>
-                        <div class="form__photo-wrapper">
-                            <!-- <div class="form__photo--bg"></div> -->
-                            <!-- <div class="form__photo--plus">+</div> -->
-                            <label for="photo" class="form__photo form__photo-label"></label>
-                        </div>
-                        <div class="form__photo-wrapper">
-                            <div class="form__photo--bg"></div>
-                            <div class="form__photo--plus">+</div>
-                            <label for="photo" class="form__photo form__photo-label"></label>
-                        </div>
-                        <div class="form__photo-wrapper">
-                            <!-- <div class="form__photo--bg"></div> -->
-                            <!-- <div class="form__photo--plus">+</div> -->
-                            <label for="photo" class="form__photo form__photo-label"></label>
-                        </div>
-                        <div class="form__photo-wrapper">
-                            <label for="photo" class="form__photo form__photo-label"></label>
                         </div>
                     </div>
                 </div>
                 <a class="form__btn-preview">Предварительный простмотр</a>
             </section>
+
             <section class="form__view main__form--none">
                 <p class="form__title">(Название товара)</p>
                 <div class="form__wrapper-photo">
                     <label for="photo" class="form__photo--main form__photo-label form__photo--preview"></label>
                     <div class="form__photo-blocks">
-                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
-                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
-                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
-                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
-                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
-                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
-                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
-                        <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
                         <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
                         <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
                         <label for="photo" class="form__photo form__photo-label form__photo--preview"></label>
@@ -161,15 +120,15 @@
                 <ul class="form-list">
                     <li class="form-list__item">
                         <p class="form-list__item-name">Категория и тип</p>
-                        <p class="form-list__item-text" id="Tags">--//--</p>
+                        <p class="form-list__item-text" id="Categories">--//--</p>
                     </li>
                     <li class="form-list__item">
                         <p class="form-list__item-name">Название</p>
                         <p class="form-list__item-text" id="Name">--//--</p>
                     </li>
                     <li class="form-list__item">
-                        <p class="form-list__item-name">Подзагаловок</p>
-                        <p class="form-list__item-text" id="Subtitle">--//--</p>
+                        <p class="form-list__item-name">Производитель</p>
+                        <p class="form-list__item-text" id="Manufacturer">--//--</p>
                     </li>
                     <li class="form-list__item">
                         <p class="form-list__item-name">Описание</p>
@@ -207,12 +166,8 @@
                         <p class="form-list__item-name">Вес упаковки</p>
                         <p class="form-list__item-text" id="Weight">--//--</p>
                     </li>
-                    <li class="form-list__item">
-                        <p class="form-list__item-name">Буяка - </p>
-                        <p class="form-list__item-text" id="Image">--//--</p>
-                    </li>
-                    <ul>
-                        <button class="form__btn-submit" type="submit">Завершить создание</button>
+                    </ul>
+                    <button class="form__btn-submit" type="submit">Завершить создание</button>
             </section>
         </form>
     </div>

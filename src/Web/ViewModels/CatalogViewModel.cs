@@ -1,4 +1,8 @@
-﻿using Core.Entities;
+﻿using Amazon.S3;
+using Core.Entities;
+using Infrastructure.Services;
+using Microsoft.Identity.Client.Extensions.Msal;
+using Web.Configuration;
 
 namespace Web.ViewModels
 {
@@ -6,6 +10,45 @@ namespace Web.ViewModels
     {
         public List<Product> Products { get; set; }
 
-        public int NumberOfPages { get; set; }
+        public int NumberOfPages
+        {
+            get
+            {
+                return Products.Count / 9;
+            }
+            private set
+            {
+                if (value < 1)
+                    throw new ArgumentOutOfRangeException(nameof(value));
+
+                NumberOfPages = value;
+            }
+        }
+
+        public int CurrentPage { get; set; }
+
+        public int CalculatePrevious()
+        {
+            if (CurrentPage < 2)
+            {
+                return 1;
+            }
+            else
+            {
+                return CurrentPage - 1;
+            }
+        }
+
+        public int CalculateNext()
+        {
+            if (CurrentPage > NumberOfPages - 1)
+            {
+                return NumberOfPages;
+            }
+            else
+            {
+                return CurrentPage + 1;
+            }
+        }
     }
 }

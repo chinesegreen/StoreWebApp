@@ -2,6 +2,6 @@
 {
     public class ProductsModel
     {
-        public List<int> ids { get; set; }
+        public List<int> Ids { get; set; }
     }
 }

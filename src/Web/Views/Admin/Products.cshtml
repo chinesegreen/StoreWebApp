@@ -1,4 +1,4 @@
-﻿@model AdminProductsViewModel
+﻿@model CatalogViewModel
 
 @{
     ViewData["Title"] = "Products";
@@ -15,15 +15,21 @@
             <div class="main__title-block--wrapper">
                 <p class="main__title">Список товаров</p>
                 <div class="title-block__btns">
-                    <a href="/Admin/Create" class="title-block__btn title-block__btn--add">Add</a>
+                    <a href="/Admin/Product/Create" class="title-block__btn title-block__btn--add">Add</a>
                     <a class="title-block__btn title-block__btn-remove">Remove</a>
+                    <a class="title-block__btn title-block__btn-restore">Restore</a>
+                    <a class="title-block__btn title-block__btn-delete">Delete</a>
                 </div>
+            </div>
+            <div class="title-block__search-block">
+                <a class="search-block__btn">Search</a>
+                <input type="text" name="searchArticul" id="searchArticul" class="search-block__inp" placeholder="Введите артикул">
             </div>
         </div>
         <ul class="product__list">
             <li class="product__item product__item--header">
                 <div class="product__info-block product__info-block--radio">
-                    <input type="checkbox" class="product__radio" value="all" name="choiceProduct" id="all-prod">
+                    <input type="checkbox" value="all" name="choiceProduct" id="all-prod">
                 </div>
                 <div class="product__info-block product__info-block--article">
                     <p class="product__article">Артикул</p>
@@ -48,6 +54,11 @@
 
             <div class="product__list-wrapper">
 
+            @if (!Model.Products.Any())
+            {
+                <li class="product__item--null">Product list is empty</li>
+            }
+
             @foreach (var product in Model.Products)
             {
                 <li class="product__item">
@@ -58,13 +69,13 @@
                         <p class="product__article">@product.VendorCode</p>
                     </div>
                     <div class="product__info-block product__info-block--photo">
-                        <img src="@product.ImageLink" class="product__img">
+                        <img src="@product.Picture" class="product__img">
                     </div>
                     <div class="product__info-block product__info-block--name-product">
                         <a href="/Catalog/Product/@product.Id" class="product__name-product">@product.Name</a>
                     </div>
                     <div class="product__info-block product__info-block--content-rating">
-                        <p class="product__content-rating">@product.Price.ToString("#.00 rub")</p>
+                        <p class="product__content-rating">@product.Price.ToString("#.00 руб.")</p>
                     </div>
                     <div class="product__info-block product__info-block--data-create">
                         <p class="product__data-create">@product.QuantityInStock.ToString("# шт.")</p>
@@ -80,7 +91,7 @@
                         }
                     </div>
                     <div class="product__info-block product__info-block--rewrite">
-                        <a href="/Admin/EditProduct/@product.Id" class="product__rewrite">Редактировать</a>
+                        <a href="/Admin/Product/Edit/@product.Id" class="product__rewrite">Редактировать</a>
                     </div>
                 </li>
             }

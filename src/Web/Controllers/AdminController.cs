@@ -1,14 +1,19 @@
 ﻿using Core.Entities;
 using Infrastructure.Data;
 using Infrastructure.Identity;
+using Infrastructure.Interfaces;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging.Signing;
 using NuGet.Protocol;
+using SixLabors.ImageSharp.Memory;
+using System.Diagnostics;
 using System.Security.Claims;
 using Web.BindingModels;
+using Web.Configuration;
 using Web.ViewModels;
 
 namespace Web.Controllers
@@ -18,46 +23,86 @@ namespace Web.Controllers
     public class AdminController : BaseController
     {
         private readonly CatalogContext _context;
+        private readonly ILocalStorageService _storage;
+        private readonly ILogger<AdminController> _logger;
 
-        public AdminController(
-            CatalogContext context)
+        public AdminController(CatalogContext context,
+            ILocalStorageService storage,
+            ILogger<AdminController> logger)
         {
             _context = context;
+            _storage = storage;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
-            return RedirectToAction(nameof(Catalog));
+            return RedirectToAction(nameof(Products));
         }
 
-        public async Task<IActionResult> Catalog()
+        [HttpGet("[Controller]/[Action]")]
+        public async Task<IActionResult> Products()
         {
-            var products = await _context.Products.ToListAsync();
+            var products = await _context.Products.OrderBy(p => p.Date).ToListAsync();
 
-            var model = new AdminProductsViewModel()
+            var model = new CatalogViewModel()
             {
                 Products = products
             };
 
-            return View("Products", model);
+            return View(model);
         }
 
+        [HttpGet("[Controller]/Product/[Action]")]
         public IActionResult Create()
         {
             return View();
         }
 
-        public IActionResult Edit()
+        [HttpGet("[Controller]/Product/Edit/{productId}")]
+        public async Task<IActionResult> Edit(int productId)
         {
-            return View();
+            var product = _context.Find<Product>(productId);
+
+            if (product == null)
+            {
+                throw new ArgumentOutOfRangeException("Артем мовсесян артем артем мовсесян");
+            }
+
+            product.Images = await _context.Images
+                    .Where(i => i.ProductId == product.Id).ToListAsync();
+
+            product.Dimensions = _context.Find<Dimensions>(productId);
+
+            return View(product);
         }
 
         [HttpPost]
         [Route("[Controller]/Product/[Action]")]
         public async Task<IActionResult> Edit([FromForm] EditProductCommand cmd)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("/Error");
+            }
+
+            var product = _context.Products.Where(p => p.Id == cmd.Id)
+                    .FirstOrDefault();
+
+            if (product != null)
+            {
+                product.SetQuantity(cmd.QuantityInStock);
+            }
+
+            await _context.SaveChangesAsync();
+
             return Ok();
         }
+
+        //public async Task EditImage()
+        //{
+
+        //}
 
         [HttpPost]
         [Route("[Controller]/Product/[Action]")]
@@ -67,109 +112,111 @@ namespace Web.Controllers
             {
                 return View("/Error");
             }
-            
-            var profilePic = cmd.Images[0];
-            cmd.Images.RemoveAt(0);
-            string filePath = await ImageLinkProvider.SaveFile(profilePic);
 
             var product = new Product()
             {
                 Name = cmd.Name,
                 NormalizedName = cmd.Name.ToUpper(),
+                Price = cmd.Price,
                 Description = cmd.Description,
-                ValueTax = cmd.ValueTax,
+                Manufacturer = cmd.Manufacturer,
                 VendorCode = cmd.VendorCode,
                 NormalizedVendorCode = cmd.VendorCode.ToUpper(),
-                Price = cmd.Price,
-                ImageLink = filePath,
-                Dimensions = cmd.Dimensions
+                ValueTax = cmd.ValueTax,
+                IsTrending = cmd.IsTrending ?? false,
+                QuantityInStock = 0,
+                Dimensions = new Dimensions()
+                {
+                    Width = cmd.Width,
+                    Height = cmd.Height,
+                    Length = cmd.Length,
+                    Weight = cmd.Weight
+                },
+                Picture = await _storage.SaveFile(cmd.Picture, "products"),
+                Categories = (cmd.Categories ?? new List<string>() { "Empty" })
+                    .Select(c => new Category()
+                    {
+                        Name = c,
+                        NormalizedName = c.ToUpper()
+                    }).ToList()
             };
 
-            // Try without null check like dimensions
-
-            if (cmd.PriceWithoutDiscount != null)
+            if (cmd.Images != null && cmd.Images.Any())
             {
-                product.PriceWithoutDiscount = cmd.PriceWithoutDiscount;
-            }
+                var images = new List<ImageObj>();
 
-            if (cmd.Tags != null)
-            {
-                product.Tags = cmd.Tags.Select(t =>
-                new Tag
+                foreach (var image in cmd.Images)
                 {
-                    Name = t,
-                    NormalizedName = t.ToUpper(),
-                    Link = t
-                }).ToList();
-            }
+                    var imageObj = new ImageObj()
+                    {
+                        Image = await _storage.SaveFile(image, "products")
+                    };
 
-            if (cmd.Images != null)
-            {
-                var filePaths = new List<string>();
-
-                foreach (var item in cmd.Images)
-                {
-                    filePaths.Add(await ImageLinkProvider.SaveFile(item));
+                    images.Add(imageObj);
                 }
 
-                product.Additionals = filePaths.Select(p => new Additional
-                {
-                    ImageLink = p
-                }).ToList();
+                product.Images = images;
             }
 
             _context.Add(product);
 
             await _context.SaveChangesAsync();
 
-            return Ok(product.Id);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> MakeTrending(int Id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View("/Error");
-            }
-
-            await _context.SaveChangesAsync();
-
             return Ok();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete([FromBody] List<int> ids)
+        public async Task<IActionResult> Delete([FromBody] ProductsModel model)
         {
-            foreach (var id in ids)
-            {
-                var product = _context.Products
-                .Where(p => p.Id == id)
-                .FirstOrDefault();
-
-                if (product == null)
-                {
-                    return BadRequest();
-                }
-
-                _context.Remove(product);
-
-                await _context.SaveChangesAsync();
-            }
-
-            return Ok();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> RemoveFromSale([FromBody] ProductsModel model)
-        {
-            Console.WriteLine(model.ids);
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            foreach (var id in model.ids)
+            foreach (var id in model.Ids)
+            {
+                var product = _context.Products
+                .Where(p => p.Id == id)
+                .FirstOrDefault();
+
+                if (product != null)
+                {
+                    // TODO: Raises IOException: the client reset the request stream
+                    //System.IO.File.Delete($"wwwroot/{product.Picture}");
+
+                    var images = await _context.Images.Where(i => i.ProductId == product.Id).ToListAsync();
+
+                    if (images != null && images.Any())
+                    {
+                        foreach (var image in images)
+                        {
+                            _context.Remove(image);
+                            //System.IO.File.Delete($"wwwroot{image.Image}");
+                        }
+                    }
+
+                    _context.Remove(product);
+
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromSale([FromBody] ProductsModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            foreach (var id in model.Ids)
             {
                 var product = _context.Products
                 .Where(p => p.Id == id)
@@ -185,10 +232,37 @@ namespace Web.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return Ok();
+            return View();
         }
 
-        [Route("[controller]/[action]/{searchString}")]
+        [HttpPost]
+        public async Task<IActionResult> RestoreForSale([FromBody] ProductsModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            foreach (var id in model.Ids)
+            {
+                var product = _context.Products
+                .Where(p => p.Id == id)
+                .FirstOrDefault();
+
+                if (product == null)
+                {
+                    return BadRequest();
+                }
+
+                product.IsDeleted = false;
+
+                await _context.SaveChangesAsync();
+            }
+
+            return View();
+        }
+
+        [HttpGet("[controller]/[action]/{searchString}")]
         public async Task<IActionResult> Search(string searchString)
         {
             var products = from p in _context.Products
@@ -196,20 +270,18 @@ namespace Web.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                products = products.Where(p => (p.NormalizedName!
-                .Contains(searchString.ToUpper()) || p.NormalizedVendorCode!.Contains(searchString.ToUpper()))
-                && !p.IsDeleted);
+                products = products.Where(p => p.NormalizedVendorCode!
+                    .Contains(searchString.ToUpper()));
             }
 
             var viewProducts = await products.ToListAsync();
 
-            var model = new AdminProductsViewModel()
+            var model = new CatalogViewModel()
             {
-                Products = viewProducts,
-                NumberOfPages = viewProducts.Count / 10
+                Products = viewProducts
             };
 
-            return View("Index", model);
+            return View(nameof(Products), model);
         }
     }
 }

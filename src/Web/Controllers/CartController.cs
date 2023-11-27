@@ -28,7 +28,8 @@ namespace Web.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index(string returnUrl)
+        [HttpGet("[Controller]")]
+        public IActionResult Cart(string returnUrl)
         {
             return View(new CartViewModel
             {
@@ -79,7 +80,7 @@ namespace Web.Controllers
         }
 
         [Authorize]
-        [HttpGet("")]
+        [HttpGet("chbsnc")]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand cmd)
         {
             string buyerId = _userManager.GetUserId(User)!;
@@ -92,7 +93,7 @@ namespace Web.Controllers
             {
                 var product = line.Product;
 
-                var catalogItemOrdered = new CatalogItemOrdered(product.Id, product.Name, product.ImageLink);
+                var catalogItemOrdered = new CatalogItemOrdered(product.Id, product.Name, product.Picture);
                 var orderItem = new OrderItem(catalogItemOrdered,line.Product.Price, line.Quantity);
 
                 items.Add(orderItem);

@@ -8,15 +8,12 @@
 
   <ItemGroup>
     <Folder Include="DomainEvents\" />
-    <Folder Include="Aggregates\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="9.0.0" />
     <PackageReference Include="Ardalis.GuardClauses" Version="4.2.0" />
     <PackageReference Include="Ardalis.Specification" Version="7.0.0" />
-    <PackageReference Include="NQT.GuardClauses" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

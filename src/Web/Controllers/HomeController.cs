@@ -20,29 +20,26 @@ namespace Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IndexViewModel model = new IndexViewModel();
 
-            var all = await _context.Products.Where(p => !p.IsDeleted).ToListAsync();
+            var all = await _context.Products.Where(p => !p.IsDeleted).OrderBy(p => p.Date).ToListAsync();
 
             var trending = all.Where(p => p.IsTrending).ToList();
 
-            if (all.Count <= 8)
+            if (all.Count > 8)
             {
-                model.RecentArrivals = all;
-            }
-            else
-            {
-                model.RecentArrivals = all.GetRange(all.Count - 8, all.Count);
+                all = all.GetRange(all.Count - 8, 8);
             }
 
-            if (trending.Count <= 4)
+            if (trending.Count > 4)
             {
-                model.Trendings = trending;
+                trending = trending.GetRange(trending.Count - 4, 4);
             }
-            else
+
+            var model = new IndexViewModel()
             {
-                model.Trendings = trending.GetRange(trending.Count - 4, trending.Count);
-            }
+                Trendings = trending,
+                RecentArrivals = all
+            };
 
             return View(model);
         }

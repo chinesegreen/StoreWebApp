@@ -17,11 +17,13 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            //Database.EnsureDeleted();
+            //Database.EnsureCreated();
         }
 
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<Tag> Tags { get; set; }
-        public DbSet<Additional> Additionals { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<ImageObj> Images { get; set; }
     }
 }

@@ -80,21 +80,78 @@ $('.form__btn-preview').on('click', () => {
      }
      reader.readAsDataURL(input.files[0]);
    }
- }
+}
 
-$("#photo").change(function () {
-    console.log($('#photo')[0].files);
-     readURL(this);
-     console.log($('#photo')[0].files);
-     if ($('#photo')[0].files.length <= 15) {
-       console.log($('#photo')[0].files);
-     }
+$(document).ready(function () {
+    $('.form__input--file').on('change', () => {
+        if ($('.form__title--numcount').text() < 15) {
+            let countFile = 0
+            $('.form__title--numcount').text(countFile)
+            $('.form__input--file').each((ind, i) => {
+                if ($(i).val() !== '') {
+                    countFile++
+                    $('.form__title--numcount').text(countFile)
+                }
+            })
+        } else {
+            $('.form__title--count').css('color', '#ff0000')
+        }
+    })
 })
 
-let photoArr = []
-$('#photo').on('change', () => {
-    photoArr.push($('#photo')[0].files[0])
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        let reader = new FileReader();
+        reader.onloadend = function (e) {
+            $($('.form__photo-label--img')[$('.form__input--file').index(input)]).attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+$('.form__input--file').on('change', (e) => {
+    readURL(e.currentTarget)
 })
+
+let categoriesArr = []
+let categoriesArrView = []
+let deleteCategories = (e) => {
+    if (categoriesArrView.length > 0) {
+        for (let i = 0, len = categoriesArr.length; i < len; i++) {
+            if (categoriesArrView[i] == $(e.currentTarget).text()) {
+                categoriesArr.splice(i, 1);
+                categoriesArrView.splice(i, 1);
+                $(e.currentTarget).remove()
+                break;
+            }
+        }
+    }
+}
+$('.form__categories--btn').on('click', (e) => {
+    if ($(`.form__input--select`).val() !== '') {
+        if (categoriesArrView.length !== 0) {
+            categoriesArrView.push(`, ${$(`.form__input--select`).val()}`)
+        } else {
+            categoriesArrView.push(`${$(`.form__input--select`).val()}`)
+        }
+
+        let newItem = document.createElement('li')
+        $(newItem).addClass('categories__item')
+        $(newItem).append(categoriesArrView[categoriesArrView.length - 1])
+        $('.categories__list').append(newItem)
+        categoriesArr.push(`${$(`.form__input--select`).val()}`)
+    }
+    $('.categories__item').on('click', deleteCategories)
+    $('.form__input--select').val('')
+})
+
+//$("#photo").change(function () {
+//    console.log($('#photo')[0].files);
+//     readURL(this);
+//     console.log($('#photo')[0].files);
+//     if ($('#photo')[0].files.length <= 15) {
+//       console.log($('#photo')[0].files);
+//     }
+//})
 
 const form = document.querySelector('#form')
 let saveData = (event) => {
@@ -102,15 +159,39 @@ let saveData = (event) => {
     var data = new FormData();
 
     data.append("Price", $('#form').serializeObject()['Price']);
+    data.append("PriceWithoutDiscount", $('#form').serializeObject()['PriceWithoutDiscount']);
     data.append("Name", $('#form').serializeObject()['Name']);
 
-    photoArr.forEach((item, index, arr) => {
-        data.append("Images", item);
+    data.append("Weight", $('#form').serializeObject()['Weight']);
+    data.append("Length", $('#form').serializeObject()['Length']);
+    data.append("Width", $('#form').serializeObject()['Width']);
+    data.append("Height", $('#form').serializeObject()['Height']);
+
+    if ($($('.form__photo-label')).css('background-image')) {
+        console.log(true);
+    }
+
+    data.append("Picture", $('#picture')[0].files[0]);
+
+    $(`.form__input--img`).each((index, item) => {
+        data.append("Images", $(item)[0].files[0]);
     });
 
-/*    data.append("Tags", $('#form').serializeObject()['Tags']);*/
+    if ($('#form').serializeObject()['IsTrending'] == "on") {
+        data.append("IsTrending", true);
+    }
+    else {
+        data.append("IsTrending", false);
+    }
+
+    categoriesArr.forEach((item, index, arr) => {
+        data.append("Categories", item);
+    });
+
+    data.append("Manufacturer", $('#form').serializeObject()['Manufacturer']);
     data.append("VendorCode", $('#form').serializeObject()['VendorCode']);
     data.append("ValueTax", $('#form').serializeObject()['ValueTax']);
+    data.append("Description", $('#form').serializeObject()['Description']);
 
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
@@ -121,10 +202,9 @@ let saveData = (event) => {
         }
     });
 
-    xhr.open("POST", "https://localhost:7214/Admin/Product/Create");
+    xhr.open("POST", requestUrl);
 
     xhr.send(data);
 }
 
-form.addEventListener('submit', saveData)
-$('.form__btn-preview').on('click', saveData)
+$('.form__btn-submit').on('click', saveData)

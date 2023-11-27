@@ -1,0 +1,84 @@
+﻿@model CartViewModel
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/footer.css">
+    <link rel="stylesheet" href="~/css/pages/cart-page.css">
+}
+
+<section class="cart-header__wrapper">
+    <div class="cart-section container">
+        <p class="cart-section__title">Shopping Cart</p>
+        <a href="#!" class="cart-section__subtitle">Shop</a>
+    </div>
+</section>
+<section class="cart__wrapper">
+    <div class="cart-main container">
+        <ul class="cart__list">
+            <li class="cart__item">
+                <div class="cart__part-item">Product</div>
+                <div class="cart__part-item"></div>
+                <div class="cart__part-item">Price</div>
+                <div class="cart__part-item">Quantity</div>
+                <div class="cart__part-item">Total</div>
+                <div class="cart__part-item"></div>
+            </li>
+            @foreach (var line in Model.Cart.Lines)
+            {
+                <li class="cart__item cart__item--order" id="@line.Product.Id">
+                    <div class="cart__part-item"><img src="@line.Product.Picture"></div>
+                    <div class="cart__part-item">@line.Product.Name</div>
+                    <div class="cart__part-item"><span class="cart__part-item__price-span">@line.Product.Price.ToString("#.00")</span></div>
+                    <div class="cart__part-item"><input type="number" min="1" max="10" value='@line.Quantity' class="cart__part-input"></div>
+                    <div class="cart__part-item cart__part-item--total-price"><span class="cart__part-item__total-price-span">@((line.Quantity * line.Product.Price).ToString("#.00"))</span></div>
+                    <div class="cart__part-item cart__part-item--delete">X</div>
+                </li>
+            }
+            <li class="cart__item cart__item--end">
+                <p class="cart__item--end-text">Your cart is empty</p>
+            </li>
+        </ul>
+        <div class="cart-result">
+            <p class="cart-result__title">Cart Total</p>
+            <p class="cart-result__subtitle">Subtotal:<span><span class="cart-result__subtotal-price">@Model.Cart.ComputeTotalValue().ToString("#.00")</span></span></p>
+            <div class="cart-result__shipping">
+                <p class="shipping__title">Shipping</p>
+                <ul class="shipping__radio-list">
+                    <li class="shipping__radio-item">
+                        <div class="radio-item__text-block">
+                            <input type="radio" class="shipping__input" name="shipping-radio" id="free" value="free" checked>
+                            <label for="free" class="shipping__label">Free Shipping:</label>
+                        </div>
+                        <p class="shipping__price">$0.00</p>
+                    </li>
+                    <li class="shipping__radio-item">
+                        <div class="radio-item__text-block">
+                            <input type="radio" class="shipping__input" name="shipping-radio" id="standart" value="standart">
+                            <label for="standart" class="shipping__label">Standart:</label>
+                        </div>
+                        <p class="shipping__price">$10.00</p>
+                    </li>
+                    <li class="shipping__radio-item">
+                        <div class="radio-item__text-block">
+                            <input type="radio" class="shipping__input" name="shipping-radio" id="express" value="express">
+                            <label for="express" class="shipping__label">Express:</label>
+                        </div>
+                        <p class="shipping__price">$20.00</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="cart-result__total">
+                <p class="cart-result__total-text">Total:</p>
+                <p class="cart-result__price">$<span class="cart-result__total-price">00</span>.00</p>
+            </div>
+            <button class="cart-result__btn">PROCEED TO CHECKOUT</button>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/pages/cart-page.js"></script>
+}

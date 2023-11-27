@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Web.Configuration;
 
 namespace Web.ViewModels
 {

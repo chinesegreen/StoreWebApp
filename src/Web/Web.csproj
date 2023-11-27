@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\img\d\**" />
+    <Content Remove="wwwroot\img\d\**" />
+    <EmbeddedResource Remove="wwwroot\img\d\**" />
+    <None Remove="wwwroot\img\d\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Program.cs" />
   </ItemGroup>
 
@@ -27,11 +34,13 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
-    <PackageReference Include="NQT.GuardClauses" Version="1.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Views\Account\" />
+    <Folder Include="wwwroot\img\products\" />
+    <Folder Include="wwwroot\img\showcases\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

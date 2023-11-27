@@ -1,0 +1,165 @@
+﻿@model Product
+
+@{
+    ViewData["Title"] = "Edit product";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/create-page.css">
+}
+
+<main class="main">
+    <div class="main-container">
+        <div class="main__title-block">
+            <p class="main__title">Редактировать товар</p>
+            <nav class="main-nav">
+                <ul class="main-nav__list">
+                    <li class="main-nav__item">
+                        <a href="#!" class="main-nav__link"><span class="main-nav__span">1</span>Информация о товаре</a>
+                    </li>
+                    <li class="main-nav__item">
+                        <a href="#!" class="main-nav__link main-nav__link--disable"><span class="main-nav__span main-nav__span--disable">2</span>Предварительный простмотр</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <form class="main__form" id="form">
+            <section class="form__view">
+                <p class="form__title">Информация о товаре</p>
+
+                <ul class="categories__list">
+                    Выбранные категории:
+                    @{
+                        if (Model.Categories != null && Model.Categories.Any())
+                        {
+                            foreach (var category in Model.Categories)
+                            {
+                                <li class="categories__item">
+                                    @category.Name
+                                </li>
+                            }
+                        }
+                    }
+                </ul>
+                <div class="form__categories">
+                    <input class="form__input form__input--select" type="text" placeholder="Категория" name="Categories">
+                    <a class="form__categories--btn">+</a>
+                </div>
+
+                <input type="text" value="@Model.Name" name="Name" class="form__input" placeholder="Название">
+                <input type="text" value="@Model.Manufacturer" name="Manufacturer" class="form__input" placeholder="Производитель">
+                <input type="text" value="@Model.VendorCode" name="VendorCode" class="form__input" placeholder="Артикул *">
+                <textarea type="text" value="@Model.Description" name="Description" class="form__input form__input--area" placeholder="Описание" maxlength="500"></textarea>
+                <div class="form__block-duo">
+                    <input type="number" value="@Model.Price" name="Price" class="form__input" placeholder="Цена *">
+                    <input type="number" value="@Model.PriceWithoutDiscount" name="PriceWithoutDiscount" class="form__input" placeholder="Цена до скидки">
+                </div>
+                <input type="text" value="@Model.QuantityInStock" name="Quantity" class="form__input" placeholder="Кол-во товара на складе">
+                <div class="form__checkbox">
+                    @{
+                        if (Model.IsTrending)
+                        {
+                            <input type="checkbox" name="IsTrending" id="IsTrending" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="IsTrending" id="IsTrending">
+                        }
+                    }
+                    <label for="IsTrending">Добавить продукт в тренды?</label>
+                </div>
+                <div class="form__wrapper-radio">
+                    <p class="block-radio__title">НДС (налог на добавочную стоймость) *</p>
+                    <div class="form__block-radio">
+                        <div class="form__radio">
+                            @{
+                                if (Model.ValueTax == 10)
+                                {
+                                    <input type="radio" name="ValueTax" id="nds10" class="form__radio-input" value="10" checked>
+                                }
+                                else
+                                {
+                                    <input type="radio" name="ValueTax" id="nds10" class="form__radio-input" value="10">
+                                }
+                            }
+                            <label class="form__radio-tile" for="nds10">10%</label>
+                        </div>
+                        <div class="form__radio">
+                            @{
+                                if (Model.ValueTax == 20)
+                                {
+                                    <input type="radio" name="ValueTax" id="nds20" class="form__radio-input" value="20" checked>
+                                }
+                                else
+                                {
+                                    <input type="radio" name="ValueTax" id="nds20" class="form__radio-input" value="20">
+                                }
+                            }
+                            <label class="form__radio-tile" for="nds20">20%</label>
+                        </div>
+                        <div class="form__radio">
+                            @{
+                                if (Model.ValueTax == 0)
+                                {
+                                    <input type="radio" name="ValueTax" id="ndsNone" class="form__radio-input" value="0" checked>
+                                }
+                                else
+                                {
+                                    <input type="radio" name="ValueTax" id="ndsNone" class="form__radio-input" value="0">
+                                }
+                            }
+                            <label class="form__radio-tile" for="ndsNone">Не облагается</label>
+                        </div>
+                    </div>
+                </div>
+                <p class="form__title">Габариты и вес</p>
+                <input class="form__input form__input--select" type="text" value="@Model.Dimensions!.Length" placeholder="Длина упаковки, мм *" name="Length">
+                <input class="form__input form__input--select" type="text" value="@Model.Dimensions!.Width" placeholder="Ширина упаковки, мм *" name="Width">
+                <input class="form__input form__input--select" type="text" value="@Model.Dimensions!.Height" placeholder="Высота упаковки, мм *" name="Height">
+                <input class="form__input form__input--select" type="text" value="@Model.Dimensions!.Weight" placeholder="Вес упаковки, г *" name="Weight">
+                <input class="form__input form__input--file" type="file" name="Image" id="picture">
+                
+                <p class="form__title">Фото</p>
+                <div class="form__wrapper-photo">
+                    <label style="background-image:url(@Model.Picture);" for="picture" class="form__photo--main form__photo-label"></label>
+                    <div class="form__photo-blocks">
+
+                        @{
+                            if (Model.Images != null && Model.Images.Any())
+                            {
+                                int i = 1;
+                                for (; i <= Model.Images.Count; i++)
+                                {
+                                    <div class="form__photo-wrapper">
+                                        <label style="background-image:url(@Model.Images[i-1].Image);" for="Image@(i + 1)" class="form__photo form__photo-label"></label>
+                                        <input class="form__input form__input--file form__input--img" type="file" name="Image@(i + 1)" id="Image@(i + 1)">
+                                    </div>
+
+                                    <div class="form__photo-wrapper">
+                                        <div class="form__photo-label--remove">X</div>
+                                        <label for="Image2" class="form__photo form__photo-label"><img src="" class="form__photo-label--img"></label>
+                                        <input class="form__input form__input--file" type="file" name="Image2" id="Image2">
+                                    </div>
+                                }
+                                for (i = i+1; i <= 7; i++)
+                                {
+                                    <div class="form__photo-wrapper">
+                                        <label for="Image@(i + 1)" class="form__photo form__photo-label"></label>
+                                        <input class="form__input form__input--file form__input--img" type="file" name="Image@(i + 1)" id="Image@(i + 1)">
+                                    </div>
+                                }
+                            }
+                        }
+
+                    </div>
+                </div>
+                <button class="form__btn-submit" type="submit">Завершить редактирование</button>
+            </section>
+        </form>
+    </div>
+</main>
+
+@section Scripts {
+    <script src="~/js/admin/edit-page.js"></script>
+}

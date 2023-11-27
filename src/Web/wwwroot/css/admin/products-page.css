@@ -43,6 +43,54 @@ img {
         border: 2px solid #fff;
     }
 
+.title-block__btn-remove {
+    background: none;
+    border: 1px solid #216BFF;
+    color: #216BFF;
+}
+
+.title-block__search-block {
+    display: flex;
+    align-items: center;
+}
+
+.search-block__btn {
+    background-color: #216BFF;
+    color: #fff;
+    margin-right: 15px;
+    padding: 8px 15px;
+}
+
+.search-block__inp {
+    padding: 8px 15px;
+    width: 18%;
+    border-radius: 0;
+    border: none;
+    background: color;
+    font-size: 16px;
+    outline: none;
+}
+
+.title-block__btn-restore {
+    background: none;
+    border: 1px solid #216BFF;
+    color: #216BFF;
+}
+
+.title-block__btn-delete {
+    background: #ff0000;
+    border: 1px solid #ff0000;
+    color: #fff;
+}
+
+.title-block__btn--disable {
+    border: 1px solid #ccc;
+    color: #949494;
+    background: #cccccc;
+    pointer-events: none;
+    transition: .3s;
+}
+
 .product__item {
     display: grid;
     padding: 15px 5px;

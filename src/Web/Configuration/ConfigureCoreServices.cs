@@ -1,5 +1,4 @@
-﻿using Abp.Domain.Repositories;
-using Core.Interfaces;
+﻿using Core.Interfaces;
 using Infrastructure.Data;
 
 namespace Web.Configuration;

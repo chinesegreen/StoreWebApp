@@ -15,11 +15,12 @@ public static class ConfigureWebServices
     {
         services.AddTransient<IEmailSender, EmailSender>();
         services.AddTransient<CustomEmailConfirmationTokenProvider<ApplicationUser>>();
-        services.AddScoped<IImageSaver, ImageSaver>();
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
         });
+
+        services.AddScoped<ILocalStorageService, LocalStorageService>();
 
         return services;
     }

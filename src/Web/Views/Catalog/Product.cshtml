@@ -1,4 +1,4 @@
-﻿@model Product
+﻿@model ProductViewModel
 
 @{
     ViewData["Title"] = "Product";
@@ -12,13 +12,13 @@
 <section class="main-section">
     <div class="main-section container">
         <div class="main-section__img-block">
-            @foreach (var item in (Model.Additionals ??= new List<Additional>()))
+            @foreach (var item in Model.GetImages())
             {
-                <img src="@item.ImageLink" class="img-block">
+                <img src="@item" class="img-block">
             }
         </div>
         <div class="main-section__info-product">
-            <p class="info-product__name">@Model.Name</p>
+            <p class="info-product__name">@Model.Product.Name</p>
             <div class="info-product__rating-block">
                 <div class="info-product__rating-item"></div>
                 <div class="info-product__rating-item"></div>
@@ -26,8 +26,8 @@
                 <div class="info-product__rating-item"></div>
                 <div class="info-product__rating-item"></div>
             </div>
-            <div class="info-product__price">$<span class="price">@Model.Price.ToString("# rub")</span><span class="info-product__price--sale">@Model.Price</span></div>
-            <p class="info-product__subtitle">@Model.Description</p>
+            <div class="info-product__price">$<span class="price">@Model.Product.Price.ToString("# rub")</span><span class="info-product__price--sale">@Model.Product.Price</span></div>
+            <p class="info-product__subtitle">@Model.Product.Description</p>
             <div class="info-product__criterial">
                 <div class="criterial-wrapper">
                     <p class="criterial-title">Criterion:</p>
@@ -52,14 +52,14 @@
             <div class="main-section__subinfo">
                 <div class="subinfo__category-block">
                     <div class="category-block__desk">Category: 
-                        @foreach (var tag in Model.Tags)
+                        @foreach (var category in Model.GetCategories())
                         {
-                            <span class="category-block__span"><a href="/Catalog/Categories/@tag.Link" class="category-block__link">@tag.Name</a></span>
+                            <span class="category-block__span"><a href="/Catalog/Categories/@category" class="category-block__link">@category</a></span>
                         }
                 </div>
                 <div class="desk-block__wrapper">
                     <p class="desk-block__title">Description</p>
-                    <p class="desk-block__desk">@Model.Description</p>
+                    <p class="desk-block__desk">@Model.Product.Description</p>
                 </div>
             </div>
         </div>
@@ -69,24 +69,7 @@
     <div class="rec-product container">
         <p class="res-product__title">You May Also Like</p>
         <ul class="rec-product__list">
-            <li class="rec-product__products-card">
-                <img src="/img/hqd.jpg" class="products-card__img">
-                <p class="products-card__title">(Название товара)</p>
-                <p class="products-card__price">(Цена)</p>
-                <button class="products-card__btn" id="1">Add to cart</button>
-            </li>
-            <li class="rec-product__products-card">
-                <img src="/img/hqd.jpg" class="products-card__img">
-                <p class="products-card__title">(Название товара)</p>
-                <p class="products-card__price">(Цена)</p>
-                <button class="products-card__btn" id="1">Add to cart</button>
-            </li>
-            <li class="rec-product__products-card">
-                <img src="/img/hqd.jpg" class="products-card__img">
-                <p class="products-card__title">(Название товара)</p>
-                <p class="products-card__price">(Цена)</p>
-                <button class="products-card__btn" id="1">Add to cart</button>
-            </li>
+            @* ? *@
             <li class="rec-product__products-card">
                 <img src="/img/hqd.jpg" class="products-card__img">
                 <p class="products-card__title">(Название товара)</p>

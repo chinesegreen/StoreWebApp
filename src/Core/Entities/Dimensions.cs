@@ -16,6 +16,6 @@ namespace Core.Entities
         public int? Weight { get; set; }
         public int? Width { get; set; }
         public int? Height { get; set; }
-        public int? Lenght { get; set; }
+        public int? Length { get; set; }
     }
 }

@@ -21,7 +21,7 @@ public class Order : IAggregateRoot
 
     public int Id { get; private set; }
     public string BuyerId { get; private set; }
-    public DateTimeOffset OrderDate { get; private set; } = DateTimeOffset.Now;
+    public DateTime OrderDate { get; private set; } = DateTime.UtcNow;
     public Address ShipToAddress { get; private set; }
     public bool IsPaid { get; private set; }
     public bool IsShiped { get; private set; }
