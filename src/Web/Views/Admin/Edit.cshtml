@@ -1,5 +1,5 @@
-﻿@model Product
-
+﻿@model ProductViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Edit product";
     Layout = "_AdminLayout";
@@ -14,26 +14,55 @@
         <div class="main__title-block">
             <p class="main__title">Редактировать товар</p>
             <nav class="main-nav">
-                <ul class="main-nav__list">
-                    <li class="main-nav__item">
-                        <a href="#!" class="main-nav__link"><span class="main-nav__span">1</span>Информация о товаре</a>
-                    </li>
-                    <li class="main-nav__item">
-                        <a href="#!" class="main-nav__link main-nav__link--disable"><span class="main-nav__span main-nav__span--disable">2</span>Предварительный простмотр</a>
-                    </li>
-                </ul>
             </nav>
         </div>
-        <form class="main__form" id="form">
-            <section class="form__view">
-                <p class="form__title">Информация о товаре</p>
+        <section class="form__view">
+            <form class="main__form-photos" id="form-photos">
+                <p class="form__title">Фото</p>
+                <div class="form__wrapper-photo">
+                    <label style="background-image:url(@Model.Product.Picture);" for="picture" class="form__photo--main form__photo-label"></label>
+                    <div class="form__photo-blocks">
+
+                        @{
+                            if (Model.Product.Images != null && Model.Product.Images.Any())
+                            {
+                                int i = 1;
+                                for (; i <= Model.Product.Images.Count; i++)
+                                {
+                                    <div class="form__photo-wrapper">
+                                        <label style="background-image:url(@Model.Product.Images[i-1].Image);" for="Image@(i + 1)" class="form__photo form__photo-label"></label>
+                                        <input class="form__input form__input--file form__input--img" type="file" name="Image@(i + 1)" id="Image@(i + 1)">
+                                    </div>
+
+                                    <div class="form__photo-wrapper">
+                                        <div class="form__photo-label--remove">X</div>
+                                        <label for="Image2" class="form__photo form__photo-label"><img src="" class="form__photo-label--img"></label>
+                                        <input class="form__input form__input--file" type="file" name="Image2" id="Image2">
+                                    </div>
+                                }
+                                for (i = i + 1; i <= 7; i++)
+                                {
+                                    <div class="form__photo-wrapper">
+                                        <label for="Image@(i + 1)" class="form__photo form__photo-label"></label>
+                                        <input class="form__input form__input--file form__input--img" type="file" name="Image@(i + 1)" id="Image@(i + 1)">
+                                    </div>
+                                }
+                            }
+                        }
+
+                    </div>
+                </div>
+            </form>
+
+            @*  asp-controller="Admin" asp-action="Edit" *@
+            <form class="main__form" id="form" method="post">
 
                 <ul class="categories__list">
                     Выбранные категории:
                     @{
-                        if (Model.Categories != null && Model.Categories.Any())
+                        if (Model.Product.Categories != null && Model.Product.Categories.Any())
                         {
-                            foreach (var category in Model.Categories)
+                            foreach (var category in Model.Product.Categories)
                             {
                                 <li class="categories__item">
                                     @category.Name
@@ -46,19 +75,18 @@
                     <input class="form__input form__input--select" type="text" placeholder="Категория" name="Categories">
                     <a class="form__categories--btn">+</a>
                 </div>
-
-                <input type="text" value="@Model.Name" name="Name" class="form__input" placeholder="Название">
-                <input type="text" value="@Model.Manufacturer" name="Manufacturer" class="form__input" placeholder="Производитель">
-                <input type="text" value="@Model.VendorCode" name="VendorCode" class="form__input" placeholder="Артикул *">
-                <textarea type="text" value="@Model.Description" name="Description" class="form__input form__input--area" placeholder="Описание" maxlength="500"></textarea>
+                <input asp-for="Product.Name" type="text" value="@Model.Product.Name" name="Name" class="form__input" placeholder="Название">
+                <input type="text" value="@Model.Product.Manufacturer" name="Manufacturer" class="form__input" placeholder="Производитель">
+                <input type="text" value="@Model.Product.VendorCode" name="VendorCode" class="form__input" placeholder="Артикул *">
+                <textarea type="text" value="@Model.Product.Description" name="Description" class="form__input form__input--area" placeholder="Описание" maxlength="500"></textarea>
                 <div class="form__block-duo">
-                    <input type="number" value="@Model.Price" name="Price" class="form__input" placeholder="Цена *">
-                    <input type="number" value="@Model.PriceWithoutDiscount" name="PriceWithoutDiscount" class="form__input" placeholder="Цена до скидки">
+                    <input type="number" value="@Model.Product.Price" name="Price" class="form__input" placeholder="Цена *">
+                    <input type="number" value="@Model.Product.PriceWithoutDiscount" name="PriceWithoutDiscount" class="form__input" placeholder="Цена до скидки">
                 </div>
-                <input type="text" value="@Model.QuantityInStock" name="Quantity" class="form__input" placeholder="Кол-во товара на складе">
+                <input type="text" value="@Model.Product.QuantityInStock" name="QuantityInStock" class="form__input" placeholder="Кол-во товара на складе">
                 <div class="form__checkbox">
                     @{
-                        if (Model.IsTrending)
+                        if (Model.Product.IsTrending)
                         {
                             <input type="checkbox" name="IsTrending" id="IsTrending" checked>
                         }
@@ -74,7 +102,7 @@
                     <div class="form__block-radio">
                         <div class="form__radio">
                             @{
-                                if (Model.ValueTax == 10)
+                                if (Model.Product.ValueTax == 10)
                                 {
                                     <input type="radio" name="ValueTax" id="nds10" class="form__radio-input" value="10" checked>
                                 }
@@ -87,7 +115,7 @@
                         </div>
                         <div class="form__radio">
                             @{
-                                if (Model.ValueTax == 20)
+                                if (Model.Product.ValueTax == 20)
                                 {
                                     <input type="radio" name="ValueTax" id="nds20" class="form__radio-input" value="20" checked>
                                 }
@@ -100,7 +128,7 @@
                         </div>
                         <div class="form__radio">
                             @{
-                                if (Model.ValueTax == 0)
+                                if (Model.Product.ValueTax == 0)
                                 {
                                     <input type="radio" name="ValueTax" id="ndsNone" class="form__radio-input" value="0" checked>
                                 }
@@ -114,49 +142,15 @@
                     </div>
                 </div>
                 <p class="form__title">Габариты и вес</p>
-                <input class="form__input form__input--select" type="text" value="@Model.Dimensions!.Length" placeholder="Длина упаковки, мм *" name="Length">
-                <input class="form__input form__input--select" type="text" value="@Model.Dimensions!.Width" placeholder="Ширина упаковки, мм *" name="Width">
-                <input class="form__input form__input--select" type="text" value="@Model.Dimensions!.Height" placeholder="Высота упаковки, мм *" name="Height">
-                <input class="form__input form__input--select" type="text" value="@Model.Dimensions!.Weight" placeholder="Вес упаковки, г *" name="Weight">
+                <input class="form__input form__input--select" type="text" value="@Model.Product.Dimensions!.Length" placeholder="Длина упаковки, мм *" name="Length">
+                <input class="form__input form__input--select" type="text" value="@Model.Product.Dimensions!.Width" placeholder="Ширина упаковки, мм *" name="Width">
+                <input class="form__input form__input--select" type="text" value="@Model.Product.Dimensions!.Height" placeholder="Высота упаковки, мм *" name="Height">
+                <input class="form__input form__input--select" type="text" value="@Model.Product.Dimensions!.Weight" placeholder="Вес упаковки, г *" name="Weight">
                 <input class="form__input form__input--file" type="file" name="Image" id="picture">
                 
-                <p class="form__title">Фото</p>
-                <div class="form__wrapper-photo">
-                    <label style="background-image:url(@Model.Picture);" for="picture" class="form__photo--main form__photo-label"></label>
-                    <div class="form__photo-blocks">
-
-                        @{
-                            if (Model.Images != null && Model.Images.Any())
-                            {
-                                int i = 1;
-                                for (; i <= Model.Images.Count; i++)
-                                {
-                                    <div class="form__photo-wrapper">
-                                        <label style="background-image:url(@Model.Images[i-1].Image);" for="Image@(i + 1)" class="form__photo form__photo-label"></label>
-                                        <input class="form__input form__input--file form__input--img" type="file" name="Image@(i + 1)" id="Image@(i + 1)">
-                                    </div>
-
-                                    <div class="form__photo-wrapper">
-                                        <div class="form__photo-label--remove">X</div>
-                                        <label for="Image2" class="form__photo form__photo-label"><img src="" class="form__photo-label--img"></label>
-                                        <input class="form__input form__input--file" type="file" name="Image2" id="Image2">
-                                    </div>
-                                }
-                                for (i = i+1; i <= 7; i++)
-                                {
-                                    <div class="form__photo-wrapper">
-                                        <label for="Image@(i + 1)" class="form__photo form__photo-label"></label>
-                                        <input class="form__input form__input--file form__input--img" type="file" name="Image@(i + 1)" id="Image@(i + 1)">
-                                    </div>
-                                }
-                            }
-                        }
-
-                    </div>
-                </div>
                 <button class="form__btn-submit" type="submit">Завершить редактирование</button>
-            </section>
-        </form>
+            </form>
+        </section>
     </div>
 </main>
 

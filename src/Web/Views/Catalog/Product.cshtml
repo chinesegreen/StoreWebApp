@@ -12,9 +12,12 @@
 <section class="main-section">
     <div class="main-section container">
         <div class="main-section__img-block">
-            @foreach (var item in Model.GetImages())
+            @if (Model.Images != null && Model.Images.Any())
             {
-                <img src="@item" class="img-block">
+                foreach (var item in Model.Images)
+                {
+                    <img src="@item" class="img-block">
+                }
             }
         </div>
         <div class="main-section__info-product">

@@ -198,7 +198,7 @@ let saveData = (event) => {
 
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
-            console.log(this.responseText);
+            location.href = /*xhr.getResponseHeader("Location")*/ "https://localhost:7214/Admin/Products";
         }
     });
 

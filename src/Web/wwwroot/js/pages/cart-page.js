@@ -1,117 +1,74 @@
-const requestUrl = 'https://jsonplaceholder.typicode.com/users'
-let checkCart = ()=>{
-  if (!$('.cart__item--order').length) {
-    $('.cart__item--end').css({'display' : 'block'})
-    $('.cart-result__subtotal-price').text(0)
-    $('.cart-result__total-price').text(0)
-    $('input[name=shipping-radio]').css({'pointerEvents' : 'none'})
-    $('.shipping__label').css({'pointerEvents' : 'none', 'color' : '#999999'})
-    $('.shipping__price').css({'color' : '#999999'})
-    $('input[name=shipping-radio]').removeAttr("checked");
-  } else {
-    $('.cart__item--end').css({'display' : 'none'})
-    
-    $('input[name=shipping-radio]').css({'pointerEvents' : 'none'})
-    $('.shipping__label').css({'pointerEvents' : 'visibly', 'color' : '#333333'})
-    $('.shipping__price').css({'color' : '#333333'})
-    $('input[name=shipping-radio]').attr("checked");
-  }
+let checkTotalPrice = () => {
+    let totalPrice = 0
+    $('.cart__part-item__total-price-span').each((ind, i) => {
+        totalPrice += +$(i).text()
+        $('.cart-result__total-price').text(totalPrice)
+    });
 }
-let checkSubtotalPrice = ()=>{
-  let orderPrice = 0
-  $('.cart__part-item__total-price-span').each((index, item)=>{
-    orderPrice = orderPrice + +$(item).text()
-    $('.cart-result__subtotal-price').text(orderPrice)
-  })
-  return orderPrice
-}
-let checkVarShipping = ()=>{
-  switch ($('input[name=shipping-radio]:checked').val()) {
-    case 'free':
-      return 0
-    case 'standart':
-      return 10
-    case 'express':
-      return 20
-    default:
-      console.log($('input[name=shipping-radio]:checked').val());
-      console.log('Где-то косяк');
-      break;
-  }
-}
-let checkTotalPrice = ()=>{
-  let orderPrice = checkVarShipping() + checkSubtotalPrice()
-  $('.cart-result__total-price').text(orderPrice)
-}
-let deleteOrder = (ind)=>{
-  $($('.cart__item--order')[ind]).remove()
-  // checkTotalPrice()
-}
-let checkOrder = ()=>{
-  $('.cart__part-input').each((index, item)=>{
-    $(item).change(()=>{
-      $(item).val(Math.floor($(item).val()))
-      if (Math.floor($(item).val()) <= 10 && Math.floor($(item).val()) > 0) {
-        let orderPrice = $($('.cart__part-item__price-span')[index]).text()*Math.floor($(item).val())
-        $($('.cart__part-item__total-price-span')[index]).text(orderPrice)
-      } else if (Math.floor(+$(item).val()) <= 0) {
-        $(item).val(1)
-        let orderPrice = $($('.cart__part-item__price-span')[index]).text()*+$(item).val()
-        $($('.cart__part-item__total-price-span')[index]).text(orderPrice)
-      } else {
-        $(item).val(10)
-        let orderPrice = $($('.cart__part-item__price-span')[index]).text()*Math.floor($(item).val())
-        $($('.cart__part-item__total-price-span')[index]).text(orderPrice)
-      }
-      $('.cart-result__subtotal-price').text()
-      checkSubtotalPrice()
-      checkTotalPrice()
-    })
-  })
-}
-
-checkOrder()
-checkCart()
-checkSubtotalPrice()
-checkVarShipping()
 checkTotalPrice()
-
-$('.cart__part-item--delete').on('click', (e)=>{
-  $('.cart__part-item--delete').each((index, item)=>{
-    if (e.target == item) {
-      deleteOrder(index)
-    }
-  })
-  checkSubtotalPrice()
-  checkTotalPrice()
-  checkOrder()
-  checkCart()
-})
-$('.shipping__input').on('click', ()=>{
-  checkTotalPrice()
-  return checkVarShipping()
+$('.cart__part-input').on('change', (e) => {
+    let index = $('.cart__part-input').index($(e.currentTarget))
+    let miniPrice = +$($('.cart__part-item__price-span')[index]).text()
+    console.log(miniPrice);
+    $($('.cart__part-item__total-price-span')[index]).text(miniPrice * +$(e.currentTarget).val())
+    checkTotalPrice()
 })
 
+let domain = "https://localhost:7214";
 
+let deleteOrder = (ind) => {
+    let id = $($('.cart__item--order')[ind]).prop('id')
+    let url = `${domain}/Cart/RemoveFromCart/${id}`
 
-let sendRequest = (method, url, body = null)=>{
-  const headers = {
-    'Content-Type': 'application/json'
-  }
-  return fetch(url, {
-    method: method,
-    body: JSON.stringify(body),
-    headers: headers
-  }).then(response => {
-    if (response.ok) {
-      return response.json()
-    }
-  })
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+            console.log(this.responseText)
+        }
+    });
+
+    xhr.open("GET", `${domain}/Cart/RemoveFromCart/${id}`);
+
+    xhr.send();
+
+    $($('.cart__item--order')[ind]).remove()
 }
-$('.cart-result__btn').on('click', (e)=>{
-  sendRequest('post', requestUrl, {
-  productCode: +$('.cart-result__total-price').text()
-  })
-    .then(data => console.log(data))
-    .catch(err => console.log(err))
+$('.cart__part-item--delete').on('click', (e) => {
+    $('.cart__part-item--delete').each((index, item) => {
+        if (e.target == item) {
+            deleteOrder(index)
+        }
+    })
+    checkTotalPrice()
+})
+
+let setQuantity = (ind) => {
+    let model = {
+        id: +$($('.cart__item--order')[ind]).prop('id'),
+        quantity: +$($('.cart__part-input')[ind]).val()
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function () {
+        console.log(this.response)
+    });
+
+    xhr.open("POST", `${domain}/Cart/SetQuantity`);
+
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(model));
+}
+$('.cart__part-input').on('change', (e) => {
+    let index = $('.cart__part-input').index($(e.currentTarget))
+    setQuantity(index)
+})
+$('.cart__part-input').each((ind, i) => {
+    let miniPrice = +$($('.cart__part-item__price-span')[ind]).text()
+    console.log(miniPrice);
+    $($('.cart__part-item__total-price-span')[ind]).text(miniPrice * +$(i).val())
+    checkTotalPrice()
 })

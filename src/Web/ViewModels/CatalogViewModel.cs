@@ -9,12 +9,13 @@ namespace Web.ViewModels
     public class CatalogViewModel
     {
         public List<Product> Products { get; set; }
+        public decimal TotalAmount { get; set; }
 
         public int NumberOfPages
         {
             get
             {
-                return Products.Count / 9;
+                return Products.Count / 32 + 1;
             }
             private set
             {

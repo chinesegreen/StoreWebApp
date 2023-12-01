@@ -131,20 +131,22 @@ $('.form__categories--btn').on('click', (e) => {
     $('.form__input--select').val('')
 })
 
-//$("#photo").change(function () {
-//    console.log($('#photo')[0].files);
-//     readURL(this);
-//     console.log($('#photo')[0].files);
-//     if ($('#photo')[0].files.length <= 15) {
-//       console.log($('#photo')[0].files);
-//     }
-//})
+$("#photo").change(function () {
+    console.log($('#photo')[0].files);
+     readURL(this);
+     console.log($('#photo')[0].files);
+     if ($('#photo')[0].files.length <= 15) {
+       console.log($('#photo')[0].files);
+     }
+})
+
 
 const form = document.querySelector('#form')
 let saveData = (event) => {
     event.preventDefault()
     var data = new FormData();
 
+    data.append("ProductId", $('#form').serializeObject()['ProductId']);
     data.append("Price", $('#form').serializeObject()['Price']);
     data.append("PriceWithoutDiscount", $('#form').serializeObject()['PriceWithoutDiscount']);
     data.append("Name", $('#form').serializeObject()['Name']);
@@ -153,8 +155,6 @@ let saveData = (event) => {
     data.append("Length", $('#form').serializeObject()['Length']);
     data.append("Width", $('#form').serializeObject()['Width']);
     data.append("Height", $('#form').serializeObject()['Height']);
-
-    //
 
     if ($('#form').serializeObject()['IsTrending'] == "on") {
         data.append("IsTrending", true);
@@ -176,8 +176,8 @@ let saveData = (event) => {
     xhr.withCredentials = true;
 
     xhr.addEventListener("readystatechange", function () {
-        if (this.readyState === 4) {
-            console.log(this.responseText);
+        if (xhr.status == 302) {
+            location.href = xhr.getResponseHeader("Location");
         }
     });
 

@@ -53,6 +53,22 @@ namespace Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public IActionResult SetQuantity([FromBody] SetQuantityCommand cmd)
+        {
+            Product? product = _context.Products
+                .FirstOrDefault(p => p.Id == cmd.Id);
+            
+            if (product != null)
+            {
+                var cart = GetCart();
+                cart.SetQuantity(product, cmd.Quantity);
+                HttpContext.Session.Set<Cart>(SessionKey, cart);
+            }
+
+            return Ok();
+        }
+
         public IActionResult RemoveFromCart(int id)
         {
             Product? product = _context.Products
@@ -60,10 +76,12 @@ namespace Web.Controllers
 
             if (product != null)
             {
-                GetCart().RemoveLine(product);
+                var cart = GetCart();
+                cart.RemoveLine(product);
+                HttpContext.Session.Set<Cart>(SessionKey, cart);
             }
 
-            return RedirectToAction("Index");
+            return Ok();
         }
 
         public Cart GetCart()

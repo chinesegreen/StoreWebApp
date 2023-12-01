@@ -9,6 +9,7 @@ namespace Core.Entities
     public class ImageObj
     {
         public int Id { get; set; }
+        public int Position { get; set; }
         public int ProductId { get; set; }
         public string Image { get; set; }
     }

@@ -156,7 +156,7 @@ input[type="color" i]::-webkit-color-swatch-wrapper {
 .cart-result {
     margin-left: 25px;
     padding: 10px 30px;
-    /* height: 500px; */
+     height: 160px; 
     box-sizing: border-box;
     color: #333333;
 }

@@ -31,6 +31,26 @@ namespace Core.Entities
             }
         }
 
+        public void SetQuantity(Product product, int quantity)
+        {
+            CartLine line = lineCollection
+                .Where(c => c.Product.Id == product.Id)
+                .FirstOrDefault();
+
+            if (line == null)
+            {
+                lineCollection.Add(new CartLine
+                {
+                    Product = product,
+                    Quantity = quantity
+                });
+            }
+            else
+            {
+                line.Quantity = quantity;
+            }
+        }
+
         public void RemoveLine(Product game)
         {
             lineCollection.RemoveAll(l => l.Product.Id == game.Id);

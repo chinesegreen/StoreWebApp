@@ -18,18 +18,6 @@ $('.search-block__btn').on('click', () => {
     }
 })
 
-$('.title-block__btn-restore').on('click', () => {
-    $('.title-block__btn-restore').attr('href', `https://localhost:7214/Admin`)
-})
-
-$('.title-block__btn-delete').on('click', () => {
-    $('.title-block__btn-delete').attr('href', `https://localhost:7214/Admin`)
-})
-
-$('.title-block__btn-remove').on('click', () => {
-    $('.title-block__btn-remove').attr('href', `https://localhost:7214/Admin`)
-})
-
 let ids = {
     "ids": []
 }
@@ -89,79 +77,33 @@ checkCount(ids['ids'].length)
 $('#all-prod').on('change', changeAllProduct)
 $('.product__radio').on('change', changeProduct)
 
-$('.title-block__btn-remove').on('click', () => {
+let sendIds = (url) => {
     if (ids['ids'].length > 0) {
-        ids = JSON.stringify(ids);
-        var settings = {
-            "url": "https://localhost:7214/admin/removefromsale",
-            "method": "POST",
-            "timeout": 0,
-            "processData": false,
-            "mimeType": "multipart/form-data",
-            "contentType": "application/json",
-            "data": ids
-        };
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
 
-        $.ajax(settings).done(function (response) {
-            console.log(response);
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                location.href = /*xhr.getResponseHeader("Location")*/ "https://localhost:7214/Admin/Products";
+            }
         });
-        $('#all-prod').prop('checked', false)
-        $('.product__radio').prop('checked', false)
-        ids['ids'].length = 0;
+        
+        xhr.open("POST", url);
+
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(JSON.stringify(ids));
     } else {
-        alert('Вы не выбрали ни одного продукта')
+        alert('No')
     }
     checkCount(ids['ids'].length)
-})
-$('.title-block__btn-delete').on('click', () => {
-    let daun = confirm(`Вы точно хотите навсегда удалить выбранные элементы?`)
-    if (daun) {
-        if (ids['ids'].length > 0) {
-            ids = JSON.stringify(ids);
-            var settings = {
-                "url": "https://localhost:7214/admin/delete",
-                "method": "POST",
-                "timeout": 0,
-                "processData": false,
-                "mimeType": "multipart/form-data",
-                "contentType": "application/json",
-                "data": ids
-            };
-
-            $.ajax(settings).done(function (response) {
-                console.log(response);
-            });
-            $('#all-prod').prop('checked', false)
-            $('.product__radio').prop('checked', false)
-            ids['ids'].length = 0;
-        } else {
-            alert('Вы не выбрали ни одного продукта')
-        }
-        checkCount(ids['ids'].length)
-    }
-})
+}
 
 $('.title-block__btn-restore').on('click', () => {
-    if (ids['ids'].length > 0) {
-        ids = JSON.stringify(ids);
-        var settings = {
-            "url": "https://localhost:7214/admin/restoreforsale",
-            "method": "POST",
-            "timeout": 0,
-            "processData": false,
-            "mimeType": "multipart/form-data",
-            "contentType": "application/json",
-            "data": ids
-        };
-
-        $.ajax(settings).done(function (response) {
-            console.log(response);
-        });
-        $('#all-prod').prop('checked', false)
-        $('.product__radio').prop('checked', false)
-        ids['ids'].length = 0;
-    } else {
-        alert('Вы не выбрали ни одного продукта')
-    }
-    checkCount(ids['ids'].length)
+    sendIds("https://localhost:7214/Admin/Restore");
+})
+$('.title-block__btn-delete').on('click', () => {
+    sendIds("https://localhost:7214/Admin/Delete");
+})
+$('.title-block__btn-remove').on('click', () => {
+    sendIds("https://localhost:7214/Admin/Remove");
 })

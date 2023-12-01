@@ -259,42 +259,62 @@
         transition: .3s;
     }
 
-.products-card__img {
-    width: 300px;
+.product__img-wrapper {
+    width: 250px;
     height: 250px;
-    /* filter: blur(2px); */
+    overflow: hidden;
 }
 
-.products-card__title {
-    color: #414141;
-    margin-top: 16px;
+.product__img {
+    width: auto;
+    height: auto;
 }
 
-.products-card__price {
-    color: #414141;
+.product__subtitle {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #777;
 }
 
-.products-card__btn {
-    margin-top: 25px;
-    padding: 10px 0;
-    width: 75%;
-    border: 1px solid #d3d3d3;
-    background: none;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
+.product__title {
+    font-size: large;
+    width: 60%;
+    color: #333333;
+    text-align: center;
+    line-height: 20px;
+    margin-top: 12px;
+    margin-bottom: 5px;
+}
+
+.product__price {
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #c96;
+}
+
+.product__price-span {
+}
+
+.product__btn {
+    outline: none;
+    border: none;
     text-transform: uppercase;
-    color: #414141;
-    cursor: pointer;
+    width: 100%;
+    padding: 5px 0;
+    color: #fff;
+    font-size: 18px;
+    background: none;
     transition: .3s;
+    overflow: hidden;
+    color: #333;
+    cursor: pointer;
     text-align: center;
 }
 
-    .products-card__btn:hover {
-        border: 1px solid #c96;
-        background-color: #c96;
-        color: #fff;
-        transition: .3s;
-    }
+.trand-products__products-card:hover .product__btn {
+    background-color: #c96;
+    color: #fff;
+}
 
 
 .categories__wrapper {

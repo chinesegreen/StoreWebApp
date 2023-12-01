@@ -48,12 +48,12 @@
             @for (int i = 0; i < Model.Trendings.Count; i++)
             {
                 <li class="trand-products__products-card">
-                    <a class="products-card__img" id="@Model.Trendings[i].Id">
-                        <img src="@Model.Trendings[i].Picture" class="products-card__img" id="@Model.Trendings[i].Id">
+                    <a class="product__img-wrapper" id="@Model.Trendings[i].Id">
+                        <img src="@Model.Trendings[i].Picture" class="product__img" id="@Model.Trendings[i].Id">
                     </a>
-                    <p class="products-card__title">@Model.Trendings[i].Name</p>
-                    <p class="products-card__price">@Model.Trendings[i].Price.ToString("# rub")</p>
-                    <a class="products-card__btn" id="@Model.Trendings[i].Id">Add to cart</a>
+                    <p class="product__title">@Model.Trendings[i].Name</p>
+                    <p class="product__price"><span class="product__price-span">@Model.Trendings[i].Price.ToString("# rub")</span></p>
+                    <a class="product__btn" id="@Model.Trendings[i].Id">Add to cart</a>
                 </li>
             }
             <!-- (до сюда) -->

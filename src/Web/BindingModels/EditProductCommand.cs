@@ -15,8 +15,6 @@ namespace Web.BindingModels
         public List<string>? Categories { get; set; }
         public int ValueTax { get; set; }
         public bool? IsTrending { get; set; }
-        public IFormFile? Picture { get; set; }
-        public List<IFormFile>? Image { get; set; }
         public int? Weight { get; set; }
         public int? Length { get; set; }
         public int? Width { get; set; }

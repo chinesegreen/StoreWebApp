@@ -6,6 +6,7 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Signing;
 using NuGet.Protocol;
@@ -35,7 +36,7 @@ namespace Web.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return RedirectToAction(nameof(Products));
         }
@@ -59,7 +60,7 @@ namespace Web.Controllers
             return View();
         }
 
-        [HttpGet("[Controller]/Product/Edit/{productId}")]
+        [HttpGet("[Controller]/Product/[Action]/{productId}")]
         public async Task<IActionResult> Edit(int productId)
         {
             var product = _context.Find<Product>(productId);
@@ -74,7 +75,12 @@ namespace Web.Controllers
 
             product.Dimensions = _context.Find<Dimensions>(productId);
 
-            return View(product);
+            var model = new ProductViewModel()
+            {
+                Product = product
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -92,17 +98,70 @@ namespace Web.Controllers
             if (product != null)
             {
                 product.SetQuantity(cmd.QuantityInStock);
+
+                product.Name = cmd.Name;
+                product.NormalizedName = cmd.Name.ToUpper();
+                product.Price = cmd.Price;
+                product.Description = cmd.Description;
+                product.Manufacturer = cmd.Manufacturer;
+                product.VendorCode = cmd.VendorCode;
+                product.NormalizedVendorCode = cmd.VendorCode.ToUpper();
+                product.ValueTax = cmd.ValueTax;
+                product.IsTrending = cmd.IsTrending ?? false;
+                product.Dimensions = new Dimensions()
+                {
+                    Width = cmd.Width,
+                    Height = cmd.Height,
+                    Length = cmd.Length,
+                    Weight = cmd.Weight
+                };
+                product.Categories = (cmd.Categories ?? new List<string>() { "Empty" })
+                    .Select(c => new Category()
+                    {
+                        Name = c,
+                        NormalizedName = c.ToUpper()
+                    }).ToList();
+            }
+            else
+            {
+                return BadRequest();
             }
 
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return Redirect("/Admin/Products");
         }
 
-        //public async Task EditImage()
-        //{
+        [HttpPost]
+        [Route("[Controller]/Product/[Action]")]
+        public async Task<IActionResult> EditImage([FromBody] EditImageCommand cmd)
+        {
+            var product = _context.Products.Where(p => p.Id == cmd.Id)
+                    .FirstOrDefault();
 
-        //}
+            if (product != null)
+            {
+                if (cmd.Position == 0)
+                {
+                    product.Picture = await _storage.SaveFile(cmd.Replacer, "products");
+                }
+                else
+                {
+                    var image = await _context.Images
+                        .Where(i => i.ProductId == cmd.Id && i.Position == cmd.Position)
+                        .FirstOrDefaultAsync();
+
+                    if (image != null)
+                    {
+                        image!.Image = await _storage.SaveFile(cmd.Replacer, "products");
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Redirect("/Admin/Products");
+        }
 
         [HttpPost]
         [Route("[Controller]/Product/[Action]")]
@@ -162,7 +221,7 @@ namespace Web.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return Redirect("/Admin/Products");
         }
 
         [HttpPost]
@@ -205,11 +264,11 @@ namespace Web.Controllers
                 }
             }
 
-            return View();
+            return Redirect("/Admin/Products");
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveFromSale([FromBody] ProductsModel model)
+        public async Task<IActionResult> Remove([FromBody] ProductsModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -232,11 +291,11 @@ namespace Web.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return View();
+            return Redirect("/Admin/Products");
         }
 
         [HttpPost]
-        public async Task<IActionResult> RestoreForSale([FromBody] ProductsModel model)
+        public async Task<IActionResult> Restore([FromBody] ProductsModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -259,7 +318,7 @@ namespace Web.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return View();
+            return Redirect("/Admin/Products");
         }
 
         [HttpGet("[controller]/[action]/{searchString}")]
