@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics;
+using Web.Configuration;
 using Web.ViewModels;
 
 namespace Web.Controllers
@@ -17,7 +19,6 @@ namespace Web.Controllers
             _context = context;
         }
 
-        [HttpGet]
         public async Task<IActionResult> Index()
         {
 
@@ -42,6 +43,25 @@ namespace Web.Controllers
             };
 
             return View(model);
+        }
+
+        public IActionResult AgeCheck([FromQuery] bool confirm)
+        {
+            if (confirm)
+            {
+                AgeConfirmationExtensions.ConfirmAge(HttpContext);
+
+                return Ok();
+            }
+            else
+            {
+                return Redirect("/Denied");
+            }
+        }
+
+        public IActionResult Denied()
+        {
+            return View();
         }
 
         public IActionResult Privacy()

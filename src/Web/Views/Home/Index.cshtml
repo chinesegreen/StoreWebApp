@@ -43,12 +43,17 @@
 <section class="trand-products__wrapper">
     <div class="trand-products container">
         <p class="trand-products__title">Trendy Products</p>
+        @if (Model.Trendings.Count == 0)
+        {
+            <p class="products__state">Theres no trending products</p>
+        }
         <ul class="trand-products__list">
             <!-- от 4 штук (от сюда) -->
+
             @for (int i = 0; i < Model.Trendings.Count; i++)
             {
-                <li class="trand-products__products-card">
-                    <a class="product__img-wrapper" id="@Model.Trendings[i].Id">
+                <li class="trand-products__product">
+                    <a href="/Catalog/Product/@Model.Trendings[i].Id" class="product__img-wrapper" id="@Model.Trendings[i].Id">
                         <img src="@Model.Trendings[i].Picture" class="product__img" id="@Model.Trendings[i].Id">
                     </a>
                     <p class="product__title">@Model.Trendings[i].Name</p>
@@ -90,17 +95,22 @@
 <section class="trand-products__wrapper">
     <div class="trand-products container">
         <p class="trand-products__title">Recent Arrivals</p>
+        @if (Model.RecentArrivals.Count == 0)
+        {
+            <p class="products__state">Theres no products</p>
+        }
         <ul class="trand-products__list">
             <!-- от 8 штук (от сюда) -->
+
             @for (int i = 0; i < Model.RecentArrivals.Count; i++)
             {
-                <li class="trand-products__products-card">
-                    <a class="products-card__img" id="@Model.RecentArrivals[i].Id">
+                <li class="trand-products__product">
+                    <a href="/Catalog/Product/@Model.RecentArrivals[i].Id" class="product__img-wrapper" id="@Model.RecentArrivals[i].Id">
                         <img src="@Model.RecentArrivals[i].Picture" class="products-card__img">
                     </a>
-                    <p class="products-card__title">@Model.RecentArrivals[i].Name</p>
-                    <p class="products-card__price">@Model.RecentArrivals[i].Price.ToString("# rub")</p>
-                    <a class="products-card__btn" id="@Model.RecentArrivals[i].Id">Add to cart</a>
+                    <p class="product__title">@Model.RecentArrivals[i].Name</p>
+                    <p class="product__price">@Model.RecentArrivals[i].Price.ToString("# rub")</p>
+                    <a class="product__btn" id="@Model.RecentArrivals[i].Id">Add to cart</a>
                 </li>
             }
             <!-- (до сюда) -->

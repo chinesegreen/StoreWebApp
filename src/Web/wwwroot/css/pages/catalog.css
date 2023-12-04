@@ -41,7 +41,7 @@ img {max-width: 100%;display: block;}
 .catalog__filters-header {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0 20px 0;
+  padding: 8px 8px 20px 8px;
   color: #333;
 }
 .catalog__filters-header a {
@@ -52,6 +52,7 @@ img {max-width: 100%;display: block;}
 .filters-header__clear {
 }
 .filters__list {
+  padding: 8px;
 }
 .filters__item {
   cursor: pointer;

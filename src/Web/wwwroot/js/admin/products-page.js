@@ -18,6 +18,12 @@ $('.search-block__btn').on('click', () => {
     }
 })
 
+$('.search-block__inp').keydown(function (e) {
+    if (e.keyCode === 13) {
+        window.location.href = `https://localhost:7214/Admin/Search/${$(e.currentTarget).val()}`
+    }
+})
+
 let ids = {
     "ids": []
 }

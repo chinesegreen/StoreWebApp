@@ -32,6 +32,8 @@ else
     });
 }
 
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AppIdentityDbContext>();
+
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
@@ -85,6 +87,15 @@ else
     app.Logger.LogInformation("Adding non-Development middleware...");
     app.UseExceptionHandler("/Error");
     app.UseHsts();
+
+    app.Map("/ping", (IApplicationBuilder branch) =>
+    {
+        branch.Run(async (HttpContext context) =>
+        {
+            context.Response.ContentType = "text/plain";
+            await context.Response.WriteAsync("pong");
+        });
+    });
 }
 
 app.UseHttpsRedirection();

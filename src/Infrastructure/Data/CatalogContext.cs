@@ -21,6 +21,8 @@ namespace Infrastructure.Data
             //Database.EnsureCreated();
         }
 
+        public DbSet<Manufacturer> Manufacturers { get; set; }
+        public DbSet<Dimensions> Dimensions { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }

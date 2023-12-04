@@ -1,4 +1,5 @@
 ﻿@using System.Security.Claims;
+@using Web.Configuration;
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
@@ -12,12 +13,32 @@
     <link rel="stylesheet" href="~/css/main.css">
     <link rel="stylesheet" href="~/css/header.css">
     <link rel="stylesheet" href="~/css/footer.css">
+    <link rel="stylesheet" href="~/css/check.css">
     @RenderSection("Styles", false)
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body class="body">
+    @{
+        if (!AgeConfirmationExtensions.IsAgeConfirmed(Context))
+        {
+            <div class="check-page__bgc">
+                <div class="check-page__wrapper">
+                    <section class="check-page container">
+                        <div class="check-page__body">
+                            <p class="check-page__title">Подтвердите что вы старше 18 лет.</p>
+                            <p class="check-page__subtitle">Артем Мовсесян Артем Мовсесян</p>
+                            <div class="check-page__btns">
+                                <button class="check-page__btn check-page__btn--accept">Подтвердить</button>
+                                <button class="check-page__btn check-page__btn--cancel">Закрыть</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        }
+    }
     <header class="header__wrapper">
         <div class="header container">
             <div class="header__logo-block">
@@ -56,7 +77,7 @@
                 </div>
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <a href="/Account" class="header__link header__link--log">@UserManager.GetUserName(User)</a>
+                    <a href="/Account" class="header__link header__link--log">Account</a>
                 }
                 else
                 {
@@ -76,6 +97,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
     <script src="~/js/header.js"></script>
+    <script src="~/js/check.js"></script>
     @RenderSection("Scripts", false)
 </body>
 </html>

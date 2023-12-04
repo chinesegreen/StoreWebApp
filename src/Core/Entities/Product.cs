@@ -19,7 +19,7 @@ namespace Core.Entities
         public int Price { get; set; }
         public int? PriceWithoutDiscount { get; set; }
         public string? Description { get; set; }
-        public string? Manufacturer { get; set; }
+        public int? ManufacturerId { get; set; }
         public string Picture { get; set; }
         public List<ImageObj>? Images { get; set; }
         public List<Category>? Categories { get; set; }

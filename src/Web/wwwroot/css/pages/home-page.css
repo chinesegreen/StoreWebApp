@@ -163,7 +163,11 @@
     z-index: 500;
 }
 
-
+.products__state {
+    font-size: 18px;
+    text-align: center;
+    color: #333;
+}
 
 .company-list {
     display: grid;
@@ -236,13 +240,13 @@
 
 .trand-products__list {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr;
     grid-gap: 25px;
     margin: 30px 0;
 }
 
-.trand-products__products-card {
+.trand-products__product {
     flex-direction: column;
     display: flex;
     justify-content: center;
@@ -252,7 +256,7 @@
     cursor: pointer;
 }
 
-    .trand-products__products-card:hover {
+    .trand-products__product:hover {
         -webkit-box-shadow: 0px 20px 25px 0px rgba(0, 0, 0, 0.2);
         -moz-box-shadow: 0px 20px 25px 0px rgba(0, 0, 0, 0.2);
         box-shadow: 0px 20px 25px 0px rgba(0, 0, 0, 0.2);
@@ -311,7 +315,7 @@
     text-align: center;
 }
 
-.trand-products__products-card:hover .product__btn {
+.trand-products__products-card:hover .products-card__btn {
     background-color: #c96;
     color: #fff;
 }
