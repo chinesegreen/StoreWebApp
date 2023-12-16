@@ -23,16 +23,14 @@ else
     builder.Services.AddDbContext<AppIdentityDbContext>(options =>
     {
         var connectionString = builder.Configuration.GetConnectionString("IdentityConnection");
-        options.UseNpgsql(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
+        options.UseSqlite("Data Source=identity.db");
     });
     builder.Services.AddDbContext<CatalogContext>(options =>
     {
         var connectionString = builder.Configuration.GetConnectionString("CatalogConnection");
-        options.UseNpgsql(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
+        options.UseSqlite("Data Source=catalog.db");
     });
 }
-
-//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AppIdentityDbContext>();
 
 builder.Services.AddDistributedMemoryCache();
 
@@ -43,6 +41,8 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -96,6 +96,21 @@ else
             await context.Response.WriteAsync("pong");
         });
     });
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var scopedProvider = scope.ServiceProvider;
+    try
+    {
+        var userManager = scopedProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var identityContext = scopedProvider.GetRequiredService<AppIdentityDbContext>();
+        await AppIdentityDbContextSeed.SeedAsync(identityContext, userManager);
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "An error occurred seeding the DB.");
+    }
 }
 
 app.UseHttpsRedirection();

@@ -31,9 +31,9 @@ namespace Infrastructure
             else
             {
                 services.AddDbContext<CatalogContext>(options =>
-                    options.UseNpgsql(configuration.GetConnectionString("CatalogConnection")));
+                    options.UseSqlite("Data Source=catalog.db"));
                 services.AddDbContext<AppIdentityDbContext>(options =>
-                    options.UseNpgsql(configuration.GetConnectionString("IdentityConnection")));
+                    options.UseSqlite("Data Source=identity.db"));
             }
         }
     }
