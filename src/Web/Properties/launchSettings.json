@@ -7,7 +7,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://pipeandpuff.ru"
+      "applicationUrl": "http://localhost:5270"
     },
     "https": {
       "commandName": "Project",
@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://pipeandpuff.ru"
+      "applicationUrl": "https://localhost:7214;http://localhost:5270"
     },
     "IIS Express": {
       "commandName": "IISExpress",
